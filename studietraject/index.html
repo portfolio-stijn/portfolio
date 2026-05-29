@@ -2,7 +2,6 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <meta name="robots" content="noindex, nofollow">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230f172a'/><text x='16' y='22' font-family='system-ui' font-size='18' font-weight='700' fill='%233b82f6' text-anchor='middle'>S</text></svg>">
     <meta name="description" content="4 jaar toegepaste informatica met scrollytelling visualisatie">
@@ -308,7 +307,7 @@
             <!-- Step 3: Scores -->
             <div class="step" data-step="3">
                 <h2>De resultaten</h2>
-                <p>Vijf keer de maximale score. Diplomapercentage van 91%. Een consistent hoog niveau over het hele traject.</p>
+                <p>Vijf keer de maximale score. Een consistent hoog niveau over het hele traject.</p>
             </div>
 
             <!-- Step 4: Tech -->
@@ -461,6 +460,16 @@
         // === SVG SETUP ===
         const svg = d3.select('#viz');
         const tooltip = d3.select('#tooltip');
+        function positionTooltip(event) {
+            var ttNode = tooltip.node();
+            var ttWidth = ttNode.offsetWidth;
+            var left = event.clientX + 14;
+            if (left + ttWidth > window.innerWidth - 10) {
+                left = event.clientX - ttWidth - 14;
+            }
+            tooltip.style('left', left + 'px')
+                   .style('top', (event.clientY - 10) + 'px');
+        }
         let width, height, margin;
         let simulation;
 
@@ -513,8 +522,7 @@
                     );
                 })
                 .on('mousemove', function (event) {
-                    tooltip.style('left', (event.clientX + 14) + 'px')
-                           .style('top', (event.clientY - 10) + 'px');
+                    positionTooltip(event);
                 })
                 .on('mouseleave', function () {
                     d3.select(this).attr('stroke-width', 2).attr('stroke', 'white');
@@ -710,7 +718,8 @@
                     .attr('y1', yScale(d.id) + yScale.bandwidth() / 2)
                     .attr('x2', xScale(0))
                     .attr('y2', yScale(d.id) + yScale.bandwidth() / 2)
-                    .attr('stroke', d.score === 20 ? '#f59e0b' : catColor[d.cat])
+                    .attr('stroke', catColor[d.cat])
+                    .attr('stroke-width', 1.5)
                     .attr('opacity', 0.4)
                     .transition().delay(300).duration(600)
                     .attr('x2', xScale(d.score));
@@ -737,7 +746,7 @@
                     .attr('x', xScale(d.score) + 18)
                     .attr('y', yScale(d.id) + yScale.bandwidth() / 2)
                     .attr('dominant-baseline', 'central')
-                    .attr('fill', d.score === 20 ? '#f59e0b' : '#64748b')
+                    .attr('fill', d.score === 20 ? catColor[d.cat] : '#64748b')
                     .text(d.score + '/20')
                     .style('opacity', 0)
                     .transition().delay(600).duration(400)
@@ -750,7 +759,9 @@
                 .attr('cx', d => xScale(d.score))
                 .attr('cy', d => yScale(d.id) + yScale.bandwidth() / 2)
                 .attr('r', barH / 2.5)
-                .attr('fill', d => d.score === 20 ? '#f59e0b' : catColor[d.cat])
+                .attr('fill', d => catColor[d.cat])
+                .attr('stroke', d => d.score === 20 ? '#ffffff' : 'white')
+                .attr('stroke-width', d => d.score === 20 ? 3 : 2)
                 .attr('opacity', 1);
         }
 
@@ -827,8 +838,7 @@
                     );
                 })
                 .on('mousemove', function (event) {
-                    tooltip.style('left', (event.clientX + 14) + 'px')
-                           .style('top', (event.clientY - 10) + 'px');
+                    positionTooltip(event);
                 })
                 .on('mouseleave', function () {
                     d3.select(this).attr('stroke-width', 2).attr('stroke', 'white');
