@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230f172a'/><text x='16' y='22' font-family='system-ui' font-size='18' font-weight='700' fill='%233b82f6' text-anchor='middle'>S</text></svg>">
+    <meta name="description" content="Portfolio van Stijn De Beuckeleer - Application Development | Data & AI">
+    <title>Stijn De Beuckeleer | Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/devicon.min.css">
+    <style>
+        /* === Hero with constellation === */
+        .hero {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero .container {
+            position: relative;
+            z-index: 2;
+        }
+
+        #constellation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.6;
+        }
+
+        .hero-content {
+            max-width: 680px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            color: white;
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-description {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 1.05rem;
+            margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+
+        .hero .btn-primary {
+            background: white;
+            color: #0f172a;
+        }
+
+        .hero .btn-primary:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+
+        .hero .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .hero .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .hero-placeholder {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            object-fit: cover;
+        }
+
+        /* === Stats banner === */
+        .stats-banner {
+            background: var(--bg-dark);
+            color: white;
+            padding: 2.5rem 0;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .stats-grid .val {
+            display: block;
+            font-size: 2.2rem;
+            font-weight: 700;
+            line-height: 1.2;
+            color: var(--primary-color);
+        }
+
+        .stats-grid .lbl {
+            font-size: 0.85rem;
+            opacity: 0.85;
+            margin-top: 0.25rem;
+        }
+
+        /* Counter animation */
+        .counter[data-animated="false"] .val {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .counter[data-animated="true"] .val {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.6s ease;
+        }
+
+        /* === Scroll reveal === */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* === Enhanced cards === */
+        .card-icon {
+            background: linear-gradient(135deg, var(--primary-color), #3b82f6);
+            color: white;
+        }
+
+        /* === Skills radar/bar === */
+        .skill-progress {
+            transition: width 1s ease;
+        }
+
+        .skill-item.visible .skill-progress {
+            /* Width set inline, animation handled by reveal */
+        }
+
+        /* === Scroll indicator (muis) === */
+        .scroll-mouse {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0.6;
+            transition: opacity 0.5s ease;
+        }
+
+        .scroll-mouse.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .scroll-mouse span {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 0.08em;
+        }
+
+        .scroll-mouse__body {
+            width: 22px;
+            height: 36px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 11px;
+            position: relative;
+        }
+
+        .scroll-mouse__wheel {
+            width: 4px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 2px;
+            position: absolute;
+            left: 50%;
+            top: 6px;
+            transform: translateX(-50%);
+            animation: scroll-wheel 2s ease-in-out infinite;
+        }
+
+        @keyframes scroll-wheel {
+            0%   { opacity: 1; top: 6px; }
+            50%  { opacity: 0.3; top: 18px; }
+            100% { opacity: 1; top: 6px; }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.2rem; }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-dark" id="mainNav">
+        <div class="container">
+            <a href="index.html" class="navbar-brand">Stijn De Beuckeleer</a>
+            <button class="navbar-toggle" aria-label="Toggle navigation">
+                <span style="background:white;"></span>
+                <span style="background:white;"></span>
+                <span style="background:white;"></span>
+            </button>
+            <ul class="navbar-nav">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="./over-mij/">Over mij</a></li>
+                <li><a href="./stage/">Stage</a></li>
+                <li><a href="./projecten/">Projecten</a></li>
+                <li><a href="./studietraject/">Studietraject</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Constellation -->
+    <section class="hero">
+        <canvas id="constellation"></canvas>
+        <div class="container">
+            <div class="hero-content">
+                <img src="assets/img/profiel.png" alt="Stijn De Beuckeleer" class="hero-placeholder">
+                <h1>Stijn De Beuckeleer</h1>
+                <p class="hero-subtitle">Application Development | Data & AI</p>
+                <p class="hero-description">
+                    25+ jaar bij de Federale Politie, met een passie voor data en technologie.<br>Laatste jaar Bachelor Toegepaste Informatica bij Thomas More.
+                </p>
+            </div>
+        </div>
+        <div class="scroll-mouse" id="scrollMouse">
+            <span>Scroll</span>
+            <div class="scroll-mouse__body">
+                <div class="scroll-mouse__wheel"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Banner -->
+    <section class="stats-banner">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="counter" data-animated="false">
+                    <span class="val" data-target="18.4">0</span>
+                    <span class="lbl">Gemiddelde score (/20)</span>
+                </div>
+                <div class="counter" data-animated="false">
+                    <span class="val" data-target="25">0</span>
+                    <span class="lbl">Vakken afgerond</span>
+                </div>
+                <div class="counter" data-animated="false">
+                    <span class="val" data-target="5">0</span>
+                    <span class="lbl">Max scores (20/20)</span>
+                </div>
+            </div>
+            <div class="text-center" style="margin-top: 1.5rem;">
+                <a href="./studietraject/" class="btn btn-secondary">Bekijk mijn studietraject</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Preview -->
+    <section class="section">
+        <div class="container">
+            <h2 class="text-center mb-4 reveal">Wat ik graag doe</h2>
+            <div class="card-grid">
+                <div class="card reveal">
+                    <h3>Data analyse</h3>
+                    <p>Van telefoniegegevens bij de politie tot business requirements bij stage. Patronen vinden in grote datasets.</p>
+                </div>
+                <div class="card reveal">
+                    <h3>Data engineering</h3>
+                    <p>OSINT-scripts voor social media en ETL-pipelines in de cloud. Data ophalen, transformeren en koppelen.</p>
+                </div>
+                <div class="card reveal">
+                    <h3>Data visualisatie</h3>
+                    <p>Onderzoeksrapporten voor het gerecht en interactieve dashboards. Data vertalen naar inzicht.</p>
+                </div>
+            </div>
+            <div class="text-center reveal" style="margin-top: 2rem;">
+                <a href="./projecten/" class="btn btn-secondary">Bekijk mijn projecten</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stage Preview -->
+    <section class="section section-alt">
+        <div class="container">
+            <h2 class="text-center mb-4 reveal">Stage project</h2>
+            <div class="card reveal">
+                <h3>Project Hawkeye - Algorhythm</h3>
+                <p class="mb-2">
+                    Een 360-graden overzicht van medewerkers door data-integratie uit
+                    HR, Lonen, Sales, Operations en Projectmanagement.
+                    Gebouwd met een AI-native werkwijze.
+                </p>
+                <table class="info-table mb-3">
+                    <tr><th>Bedrijf</th><td>Algorhythm, Turnhout</td></tr>
+                    <tr><th>Periode</th><td>30 januari - 29 mei 2026</td></tr>
+                    <tr><th>Domein</th><td>Business Intelligence / AI</td></tr>
+                </table>
+                <div class="tags mb-3">
+                    <span class="tag"><i class="devicon-azure-plain colored"></i> Azure</span>
+                    <span class="tag">Microsoft Fabric</span>
+                    <span class="tag">Power BI</span>
+                    <span class="tag">ETL/ELT</span>
+                    <span class="tag">Data Modelling</span>
+                </div>
+                <div class="text-center">
+                    <a href="./stage/" class="btn btn-secondary">Meer over mijn stage</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="social-links">
+                <a href="https://github.com/portfolio-stijn" target="_blank" rel="noopener" aria-label="GitHub">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                </a>
+                <a href="mailto:stijn@debeuckeleer.eu" aria-label="Email">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M0 3v18h24v-18h-24zm21.518 2l-9.518 7.713-9.518-7.713h19.036zm-19.518 14v-11.817l10 8.104 10-8.104v11.817h-20z"/></svg>
+                </a>
+                <div class="signal-wrap">
+                    <a href="#" aria-label="Signal" onclick="return false;">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l4.93-1.38A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18a8 8 0 0 1-4.07-1.11l-.29-.17-3.01.84.84-3.01-.17-.29A8 8 0 1 1 12 20z"/></svg>
+                    </a>
+                    <div class="signal-qr-popup">
+                        <img src="assets/img/signal-qr.png" alt="Signal QR code">
+                    </div>
+                </div>
+            </div>
+            <p class="footer-text">&copy; 2026 Stijn De Beuckeleer. man in the loop</p>
+        </div>
+    </footer>
+
+    <script>
+    (function () {
+        'use strict';
+
+        // === CONSTELLATION ANIMATION ===
+        const canvas = document.getElementById('constellation');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let animId;
+
+        const skills = [
+            'Python','SQL','Power BI','C#','.NET','Azure','Fabric',
+            'DAX','Pandas','Java','PHP','Linux','Git','ETL'
+        ];
+
+        function resizeCanvas() {
+            canvas.width = canvas.offsetWidth * (window.devicePixelRatio || 1);
+            canvas.height = canvas.offsetHeight * (window.devicePixelRatio || 1);
+            ctx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
+        }
+
+        function initParticles() {
+            particles = [];
+            const w = canvas.offsetWidth;
+            const h = canvas.offsetHeight;
+            const count = Math.min(skills.length + 20, 35);
+
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: Math.random() * w,
+                    y: Math.random() * h,
+                    vx: (Math.random() - 0.5) * 0.4,
+                    vy: (Math.random() - 0.5) * 0.4,
+                    r: i < skills.length ? 5 : 2.5,
+                    label: i < skills.length ? skills[i] : null,
+                    alpha: 0.3 + Math.random() * 0.5
+                });
+            }
+        }
+
+        function drawConstellation() {
+            const w = canvas.offsetWidth;
+            const h = canvas.offsetHeight;
+            ctx.clearRect(0, 0, w, h);
+
+            // Draw connections
+            const maxDist = 160;
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < maxDist) {
+                        const alpha = (1 - dist / maxDist) * 0.15;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = 'rgba(59, 130, 246, ' + alpha + ')';
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            // Draw particles and labels
+            particles.forEach(p => {
+                // Dot
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(59, 130, 246, ' + p.alpha + ')';
+                ctx.fill();
+
+                // Label
+                if (p.label) {
+                    ctx.font = '11px Inter, sans-serif';
+                    ctx.fillStyle = 'rgba(148, 163, 184, ' + (p.alpha * 0.8) + ')';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(p.label, p.x, p.y - 10);
+                }
+
+                // Move
+                p.x += p.vx;
+                p.y += p.vy;
+
+                // Bounce at edges
+                if (p.x < 0 || p.x > w) p.vx *= -1;
+                if (p.y < 0 || p.y > h) p.vy *= -1;
+                p.x = Math.max(0, Math.min(w, p.x));
+                p.y = Math.max(0, Math.min(h, p.y));
+            });
+
+            animId = requestAnimationFrame(drawConstellation);
+        }
+
+        resizeCanvas();
+        initParticles();
+        drawConstellation();
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            initParticles();
+        });
+
+        // === NAVBAR SCROLL EFFECT ===
+        const nav = document.getElementById('mainNav');
+        window.scrollTo(0, 0);
+        const scrollMouse = document.getElementById('scrollMouse');
+        window.addEventListener('scroll', () => {
+            nav.classList.toggle('scrolled', window.scrollY > 100);
+            scrollMouse.classList.toggle('hidden', window.scrollY > 50);
+        });
+
+        // === COUNTER ANIMATION ===
+        function animateCounters() {
+            document.querySelectorAll('.counter').forEach(counter => {
+                if (counter.dataset.animated === 'true') return;
+                const rect = counter.getBoundingClientRect();
+                if (rect.top < window.innerHeight * 0.85) {
+                    counter.dataset.animated = 'true';
+                    const valEl = counter.querySelector('.val');
+                    const target = parseFloat(valEl.dataset.target);
+                    const isFloat = target % 1 !== 0;
+                    const duration = 1200;
+                    const start = performance.now();
+
+                    function tick(now) {
+                        const elapsed = now - start;
+                        const progress = Math.min(elapsed / duration, 1);
+                        const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+                        const current = eased * target;
+                        valEl.textContent = isFloat ? current.toFixed(1) : Math.round(current);
+                        if (progress < 1) requestAnimationFrame(tick);
+                    }
+                    requestAnimationFrame(tick);
+                }
+            });
+        }
+
+        // === SCROLL REVEAL ===
+        function revealOnScroll() {
+            document.querySelectorAll('.reveal').forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if (rect.top < window.innerHeight * 0.88) {
+                    el.classList.add('visible');
+                    // Animate skill bars
+                    const bar = el.querySelector('.skill-progress');
+                    if (bar && bar.style.width === '0%') {
+                        bar.style.width = bar.dataset.width + '%';
+                    }
+                }
+            });
+        }
+
+        window.addEventListener('scroll', () => {
+            animateCounters();
+            revealOnScroll();
+        });
+
+        // Trigger once on load
+        animateCounters();
+        revealOnScroll();
+
+        // Mobile nav
+        document.querySelector('.navbar-toggle').addEventListener('click', function() {
+            document.querySelector('.navbar-nav').classList.toggle('active');
+        });
+
+    })();
+    </script>
+</body>
+</html>

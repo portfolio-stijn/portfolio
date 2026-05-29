@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230f172a'/><text x='16' y='22' font-family='system-ui' font-size='18' font-weight='700' fill='%233b82f6' text-anchor='middle'>S</text></svg>">
+    <meta name="description" content="4 jaar toegepaste informatica met scrollytelling visualisatie">
+    <title>Studietraject | Stijn De Beuckeleer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        /* === Scrollytelling Layout === */
+        #scrolly {
+            position: relative;
+            background: var(--bg-light);
+        }
+
+        .scrolly__figure {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-light);
+            z-index: 0;
+        }
+
+        #viz {
+            width: 100%;
+            height: 100%;
+        }
+
+        .scrolly__steps {
+            position: relative;
+            z-index: 2;
+            margin-top: -100vh;
+            padding-bottom: 20vh;
+            pointer-events: none;
+        }
+
+        .step {
+            margin: 0 0 75vh 5%;
+            padding: 1.75rem 2rem;
+            max-width: 380px;
+            pointer-events: auto;
+            background: rgba(30, 41, 59, 0.92);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            opacity: 0.25;
+            transition: opacity 0.4s ease;
+        }
+
+        .step.is-active {
+            opacity: 1;
+        }
+
+        .step:first-child {
+            margin-top: 45vh;
+        }
+
+        .step h2 {
+            font-size: 1.35rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .step p {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            margin-bottom: 0;
+            line-height: 1.6;
+        }
+
+        .step .stat {
+            display: inline-block;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 0.5rem 0;
+        }
+
+        .step .stat-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-light);
+        }
+
+        .step .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.4rem;
+            font-size: 0.88rem;
+        }
+
+        .step .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* Scroll indicator (muis) */
+        .scroll-hint {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 10;
+            opacity: 0.6;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+
+        .scroll-hint.hidden {
+            opacity: 0;
+        }
+
+        .scroll-hint span {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            letter-spacing: 0.08em;
+        }
+
+        .scroll-hint__body {
+            width: 22px;
+            height: 36px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 11px;
+            position: relative;
+        }
+
+        .scroll-hint__wheel {
+            width: 4px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 2px;
+            position: absolute;
+            left: 50%;
+            top: 6px;
+            transform: translateX(-50%);
+            animation: scroll-wheel 2s ease-in-out infinite;
+        }
+
+        @keyframes scroll-wheel {
+            0%   { opacity: 1; top: 6px; }
+            50%  { opacity: 0.3; top: 18px; }
+            100% { opacity: 1; top: 6px; }
+        }
+
+        /* Tooltip */
+        .viz-tooltip {
+            position: fixed;
+            pointer-events: none;
+            background: rgba(30, 41, 59, 0.95);
+            color: #e2e8f0;
+            padding: 0.6rem 0.9rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.82rem;
+            line-height: 1.4;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.15s;
+            max-width: 220px;
+        }
+
+        .viz-tooltip strong {
+            display: block;
+            font-size: 0.9rem;
+            margin-bottom: 2px;
+        }
+
+        .viz-tooltip .tt-score {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* D3 elements */
+        .axis text {
+            font-family: var(--font-sans);
+            font-size: 12px;
+            fill: var(--text-light);
+        }
+
+        .axis line, .axis path {
+            stroke: var(--border-color);
+        }
+
+        .cat-label {
+            font-family: var(--font-sans);
+            font-weight: 600;
+            fill: var(--text-color);
+            text-anchor: middle;
+        }
+
+        .bar-label {
+            font-family: var(--font-sans);
+            font-size: 12px;
+            fill: var(--text-light);
+        }
+
+        .lollipop-line {
+            stroke-width: 2;
+            stroke-linecap: round;
+        }
+
+        .score-label {
+            font-family: var(--font-sans);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Mobile fallback */
+        .mobile-fallback {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            #scrolly { display: none; }
+            .mobile-fallback { display: block; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-dark" id="mainNav">
+        <div class="container">
+            <a href="index.html" class="navbar-brand">Stijn De Beuckeleer</a>
+            <button class="navbar-toggle" aria-label="Toggle navigation">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="navbar-nav">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="../over-mij/">Over mij</a></li>
+                <li><a href="../stage/">Stage</a></li>
+                <li><a href="../projecten/">Projecten</a></li>
+                <li><a href="../studietraject/" class="active">Studietraject</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header" style="padding-bottom: 1.5rem;">
+        <div class="container">
+            <h1>Mijn studietraject</h1>
+            <p>4 jaar Toegepaste Informatica. 25 vakken. Scroll om het verhaal te ontdekken.</p>
+        </div>
+    </header>
+
+    <!-- ==================== SCROLLYTELLING ==================== -->
+    <section id="scrolly">
+        <figure class="scrolly__figure">
+            <svg id="viz"></svg>
+        </figure>
+
+        <div class="scroll-hint" id="scrollHint">
+            <span>Scroll</span>
+            <div class="scroll-hint__body">
+                <div class="scroll-hint__wheel"></div>
+            </div>
+        </div>
+
+        <article class="scrolly__steps">
+            <!-- Step 0: Cloud -->
+            <div class="step" data-step="0">
+                <h2>25 vakken, 4 jaar</h2>
+                <div>
+                    <span class="stat">18.4</span><span style="font-size:1.2rem;font-weight:600;color:var(--primary-color);">/20</span>
+                </div>
+                <p class="stat-label">gemiddelde score</p>
+                <p style="margin-top:0.75rem;">Elk punt is een vak uit mijn Bachelor Toegepaste Informatica aan Thomas More.</p>
+            </div>
+
+            <!-- Step 1: Clusters -->
+            <div class="step" data-step="1">
+                <h2>Vijf domeinen</h2>
+                <p>Van een brede basis naar specialisatie in Data & AI.</p>
+                <div style="margin-top:0.75rem;">
+                    <div class="legend-item"><div class="legend-dot" style="background:#3b82f6;"></div> Data & AI</div>
+                    <div class="legend-item"><div class="legend-dot" style="background:#10b981;"></div> Web Development</div>
+                    <div class="legend-item"><div class="legend-dot" style="background:#06b6d4;"></div> Software Engineering</div>
+                    <div class="legend-item"><div class="legend-dot" style="background:#f59e0b;"></div> Infrastructure</div>
+                    <div class="legend-item"><div class="legend-dot" style="background:#8b5cf6;"></div> Business</div>
+                </div>
+            </div>
+
+            <!-- Step 2: Timeline -->
+            <div class="step" data-step="2">
+                <h2>Vier academiejaren</h2>
+                <p>Jaar 1 legde een brede technische basis.<br>Jaar 2 verdiepte data en development.<br>Jaar 3 bracht de specialisatie.<br>Jaar 4 combineerde alles in AI, projectwerk en stage.</p>
+            </div>
+
+            <!-- Step 3: Scores -->
+            <div class="step" data-step="3">
+                <h2>De resultaten</h2>
+                <p>Vijf keer de maximale score. Diplomapercentage van 91%. Een consistent hoog niveau over het hele traject.</p>
+            </div>
+
+            <!-- Step 4: Tech -->
+            <div class="step" data-step="4">
+                <h2>Mijn tech stack</h2>
+                <p>Python en SQL als fundament. Power BI, C# en cloud als specialisatie. Een breed maar steeds data-gerichter pad.</p>
+                <div style="margin-top:0.75rem;">
+                    <div class="legend-item"><div class="legend-dot" style="background:#3b82f6;"></div> Code</div>
+                    <div class="legend-item"><div class="legend-dot" style="background:#10b981;"></div> Data tools</div>
+                    <div class="legend-item"><div class="legend-dot" style="background:#f59e0b;"></div> Infra & cloud</div>
+                </div>
+            </div>
+        </article>
+    </section>
+
+    <!-- ==================== MOBILE FALLBACK ==================== -->
+    <section class="section section-alt mobile-fallback">
+        <div class="container">
+            <h2 class="mb-4">Studieresultaten</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Jaar 1 (2022-2023)</h3>
+                    <p>8 vakken, gemiddeld 18.6/20</p>
+                    <div class="tags mt-2">
+                        <span class="tag">Java</span><span class="tag">Python</span><span class="tag">SQL</span><span class="tag">Networking</span><span class="tag">Webdesign</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Jaar 2 (2023-2024)</h3>
+                    <p>6 vakken, gemiddeld 18.8/20</p>
+                    <div class="tags mt-2">
+                        <span class="tag">Data Science</span><span class="tag">PHP</span><span class="tag">Linux</span><span class="tag">Requirements</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Jaar 3 (2024-2025)</h3>
+                    <p>8 vakken, gemiddeld 18.1/20</p>
+                    <div class="tags mt-2">
+                        <span class="tag">C# .NET</span><span class="tag">Power BI</span><span class="tag">React</span><span class="tag">AI</span><span class="tag">IoT</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Jaar 4 (2025-2026)</h3>
+                    <p>3 vakken, gemiddeld 17.7/20</p>
+                    <div class="tags mt-2">
+                        <span class="tag">AI.NET</span><span class="tag">Mobile & AR</span><span class="tag">Project 4.0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== CTA BANNER ==================== -->
+    <section class="section" style="text-align:center;">
+        <div class="container">
+            <h2>Benieuwd naar de projecten?</h2>
+            <p style="color:var(--text-light);margin-bottom:1.5rem;">Bekijk de concrete resultaten van dit studietraject.</p>
+            <a href="../projecten/" class="btn btn-secondary">Bekijk projecten</a>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="social-links">
+                <a href="https://github.com/portfolio-stijn" target="_blank" rel="noopener" aria-label="GitHub">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                </a>
+                <a href="mailto:stijn@debeuckeleer.eu" aria-label="Email">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M0 3v18h24v-18h-24zm21.518 2l-9.518 7.713-9.518-7.713h19.036zm-19.518 14v-11.817l10 8.104 10-8.104v11.817h-20z"/></svg>
+                </a>
+                <div class="signal-wrap">
+                    <a href="#" aria-label="Signal" onclick="return false;">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l4.93-1.38A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18a8 8 0 0 1-4.07-1.11l-.29-.17-3.01.84.84-3.01-.17-.29A8 8 0 1 1 12 20z"/></svg>
+                    </a>
+                    <div class="signal-qr-popup">
+                        <img src="../assets/img/signal-qr.png" alt="Signal QR code">
+                    </div>
+                </div>
+            </div>
+            <p class="footer-text">&copy; 2026 Stijn De Beuckeleer. man in the loop</p>
+        </div>
+    </footer>
+
+    <!-- Tooltip -->
+    <div class="viz-tooltip" id="tooltip"></div>
+
+    <!-- ==================== SCRIPTS ==================== -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script>
+    (function () {
+        'use strict';
+
+        // === DATA ===
+        const courses = [
+            // 2022-2023
+            { id:1,  name:"Switching, Routing & Wireless", short:"SRW",       score:19, year:1, period:"2022-2023", cat:"Infrastructure",     tech:["Cisco","Networking"] },
+            { id:2,  name:"Web Applications in Java",      short:"Java Web",  score:19, year:1, period:"2022-2023", cat:"Web Development",    tech:["Java","JSP"] },
+            { id:3,  name:"Application Dev in Python",     short:"Python",    score:19, year:1, period:"2022-2023", cat:"Software Engineering",tech:["Python"] },
+            { id:4,  name:"Data Analysis with SQL",        short:"SQL",       score:19, year:1, period:"2022-2023", cat:"Data & AI",           tech:["SQL","SQL Server"] },
+            { id:5,  name:"Network Essentials",            short:"Networks",  score:19, year:1, period:"2022-2023", cat:"Infrastructure",     tech:["TCP/IP","Networking"] },
+            { id:6,  name:"Webdesign Advanced",            short:"Webdes.A",  score:18, year:1, period:"2022-2023", cat:"Web Development",    tech:["HTML","CSS","JavaScript"] },
+            { id:7,  name:"IT Essentials",                 short:"IT Ess.",   score:18, year:1, period:"2022-2023", cat:"Infrastructure",     tech:["Hardware","OS"] },
+            { id:8,  name:"Webdesign Essentials",          short:"Webdes.E",  score:18, year:1, period:"2022-2023", cat:"Web Development",    tech:["HTML","CSS"] },
+            // 2023-2024
+            { id:9,  name:"Requirements Analysis",         short:"Req. An.",  score:20, year:2, period:"2023-2024", cat:"Business",           tech:["UML"] },
+            { id:10, name:"Data Science",                  short:"Data Sc.",  score:19, year:2, period:"2023-2024", cat:"Data & AI",           tech:["Python","Pandas","Scikit-learn"] },
+            { id:11, name:"Linux",                         short:"Linux",     score:19, year:2, period:"2023-2024", cat:"Infrastructure",     tech:["Linux","Bash"] },
+            { id:12, name:"Web Applications in PHP",       short:"PHP Web",   score:19, year:2, period:"2023-2024", cat:"Web Development",    tech:["PHP","MySQL"] },
+            { id:13, name:"Project PHP",                   short:"Proj PHP",  score:18, year:2, period:"2023-2024", cat:"Web Development",    tech:["PHP","MySQL"] },
+            { id:14, name:"Windows",                       short:"Windows",   score:18, year:2, period:"2023-2024", cat:"Infrastructure",     tech:["Windows Server"] },
+            // 2024-2025
+            { id:15, name:".NET Development",              short:".NET",      score:20, year:3, period:"2024-2025", cat:"Software Engineering",tech:["C#",".NET","EF Core"] },
+            { id:16, name:"Data Visualisation",            short:"Data Viz",  score:20, year:3, period:"2024-2025", cat:"Data & AI",           tech:["Power BI","DAX"] },
+            { id:17, name:"React",                         short:"React",     score:20, year:3, period:"2024-2025", cat:"Web Development",    tech:["React","JavaScript"] },
+            { id:18, name:"Artificial Intelligence",       short:"AI",        score:20, year:3, period:"2024-2025", cat:"Data & AI",           tech:["Python","ML"] },
+            { id:19, name:"IoT Essentials",                short:"IoT",       score:19, year:3, period:"2024-2025", cat:"Infrastructure",     tech:["IoT","Sensors"] },
+            { id:20, name:"Business Processes & ITIL",     short:"ITIL",      score:17, year:3, period:"2024-2025", cat:"Business",           tech:["ITIL"] },
+            { id:21, name:"Angular",                       short:"Angular",   score:16, year:3, period:"2024-2025", cat:"Web Development",    tech:["Angular","TypeScript"] },
+            { id:22, name:"Java Development",              short:"Java Dev",  score:13, year:3, period:"2024-2025", cat:"Software Engineering",tech:["Java"] },
+            // 2025-2026
+            { id:23, name:"AI.NET",                        short:"AI.NET",    score:19, year:4, period:"2025-2026", cat:"Data & AI",           tech:["C#",".NET","ML"] },
+            { id:24, name:"Project 4.0",                   short:"Proj 4.0",  score:18, year:4, period:"2025-2026", cat:"Software Engineering",tech:["Agile","DevOps"] },
+            { id:25, name:"Mobile & AR Development",       short:"Mobile",    score:16, year:4, period:"2025-2026", cat:"Software Engineering",tech:["Mobile","AR"] },
+        ];
+
+        const catColor = { 'Data & AI':'#3b82f6', 'Web Development':'#10b981', 'Software Engineering':'#06b6d4', Infrastructure:'#f59e0b', Business:'#8b5cf6' };
+
+        // Tech data (aggregated from courses + stage)
+        const techMap = {};
+        courses.forEach(c => c.tech.forEach(t => { techMap[t] = (techMap[t] || 0) + 1; }));
+        // Add stage tech
+        ['Azure','Microsoft Fabric','Power BI','ETL/ELT','DAX'].forEach(t => { techMap[t] = (techMap[t] || 0) + 1; });
+
+        const techDomain = {
+            'Python':'Code','SQL':'Code','Java':'Code','C#':'Code','PHP':'Code','.NET':'Code',
+            'React':'Code','Angular':'Code','TypeScript':'Code','JavaScript':'Code','Mobile':'Code','AR':'Code',
+            'Power BI':'Data','DAX':'Data','Pandas':'Data','Scikit-learn':'Data','SQL Server':'Data','MySQL':'Data','ML':'Data',
+            'Cisco':'Infra','Networking':'Infra','TCP/IP':'Infra','Linux':'Infra','Bash':'Infra','Windows Server':'Infra',
+            'Azure':'Infra','Microsoft Fabric':'Infra','EF Core':'Code','JSP':'Code','IoT':'Infra','Sensors':'Infra',
+            'HTML':'Code','CSS':'Code','Hardware':'Infra','OS':'Infra',
+            'UML':'Data','ITIL':'Infra','ETL/ELT':'Data','Agile':'Data','DevOps':'Infra'
+        };
+        const techDomainColor = { Code:'#3b82f6', Data:'#10b981', Infra:'#f59e0b' };
+
+        const techData = Object.entries(techMap)
+            .map(([name, count]) => ({ name, count, domain: techDomain[name] || 'Code' }))
+            .sort((a, b) => b.count - a.count);
+
+        // === SVG SETUP ===
+        const svg = d3.select('#viz');
+        const tooltip = d3.select('#tooltip');
+        let width, height, margin;
+        let simulation;
+
+        const g = svg.append('g'); // main group
+        const axisGroup = g.append('g').attr('class','axes').style('opacity', 0);
+        const xAxisG = axisGroup.append('g').attr('class','axis x-axis');
+        const yAxisG = axisGroup.append('g').attr('class','axis y-axis');
+        const elemGroup = g.append('g').attr('class','elements');
+        const labelGroup = g.append('g').attr('class','labels');
+        const techGroup = g.append('g').attr('class','tech-group').style('opacity', 0);
+
+        // Radius scale
+        const rScale = d3.scaleLinear().domain([13, 20]).range([10, 24]);
+
+        // Current state
+        let currentStep = -1;
+
+        function getDimensions() {
+            const rect = svg.node().getBoundingClientRect();
+            width = rect.width;
+            height = rect.height;
+            margin = { top: 60, right: 60, bottom: 60, left: 160 };
+        }
+
+        function init() {
+            getDimensions();
+
+            // Create course circles
+            const circles = elemGroup.selectAll('.course-dot')
+                .data(courses, d => d.id)
+                .join('circle')
+                .attr('class', 'course-dot')
+                .attr('r', 0)
+                .attr('cx', width / 2)
+                .attr('cy', height / 2)
+                .attr('fill', '#3b82f6')
+                .attr('opacity', 0)
+                .attr('stroke', 'white')
+                .attr('stroke-width', 2)
+                .style('cursor', 'default');
+
+            // Tooltip events
+            circles
+                .on('mouseenter', function (event, d) {
+                    d3.select(this).attr('stroke-width', 3).attr('stroke', '#0f172a');
+                    tooltip.style('opacity', 1).html(
+                        '<strong>' + d.name + '</strong>' +
+                        '<span class="tt-score">' + d.score + '/20</span> &middot; ' +
+                        d.period + '<br>' + d.tech.join(', ')
+                    );
+                })
+                .on('mousemove', function (event) {
+                    tooltip.style('left', (event.clientX + 14) + 'px')
+                           .style('top', (event.clientY - 10) + 'px');
+                })
+                .on('mouseleave', function () {
+                    d3.select(this).attr('stroke-width', 2).attr('stroke', 'white');
+                    tooltip.style('opacity', 0);
+                });
+
+            // Force simulation (not started yet)
+            simulation = d3.forceSimulation(courses)
+                .force('charge', d3.forceManyBody().strength(-40))
+                .force('center', d3.forceCenter(width / 2, height / 2))
+                .force('collision', d3.forceCollide().radius(d => rScale(d.score) + 3))
+                .on('tick', () => {
+                    elemGroup.selectAll('.course-dot')
+                        .attr('cx', d => d.x)
+                        .attr('cy', d => d.y);
+                })
+                .stop();
+        }
+
+        // === VISUALIZATION STATES ===
+
+        function showCloud() {
+            // Show course dots, hide everything else
+            axisGroup.transition().duration(400).style('opacity', 0);
+            labelGroup.selectAll('*').transition().duration(400).style('opacity', 0).remove();
+            techGroup.transition().duration(400).style('opacity', 0);
+            elemGroup.selectAll('.lollipop-line').transition().duration(400).style('opacity', 0).remove();
+
+            const circles = elemGroup.selectAll('.course-dot')
+                .transition().duration(600)
+                .attr('r', d => rScale(d.score))
+                .attr('fill', '#3b82f6')
+                .attr('opacity', 0.8);
+
+            // Reset positions to center before starting simulation
+            courses.forEach(d => {
+                if (d.x === undefined) { d.x = width/2 + (Math.random()-0.5)*100; d.y = height/2 + (Math.random()-0.5)*100; }
+            });
+
+            simulation
+                .force('x', d3.forceX(width / 2).strength(0.05))
+                .force('y', d3.forceY(height / 2).strength(0.05))
+                .force('charge', d3.forceManyBody().strength(-40))
+                .force('collision', d3.forceCollide().radius(d => rScale(d.score) + 3))
+                .alpha(0.6).restart();
+        }
+
+        var clusterSim = null;
+        function showClusters() {
+            axisGroup.transition().duration(400).style('opacity', 0);
+            techGroup.transition().duration(400).style('opacity', 0);
+            elemGroup.selectAll('.lollipop-line').transition().duration(400).style('opacity', 0).remove();
+            simulation.stop();
+            if (clusterSim) clusterSim.stop();
+
+            // Category centroid positions -- 5 domains with more spread
+            var cx = width / 2, cy = height / 2;
+            var spreadX = Math.min(width * 0.28, 320);
+            var spreadY = Math.min(height * 0.25, 200);
+            var catPos = {
+                'Data & AI':           { x: cx,              y: cy - spreadY * 1.1 },
+                'Web Development':     { x: cx + spreadX,    y: cy - spreadY * 0.2 },
+                'Software Engineering':{ x: cx + spreadX*0.6,y: cy + spreadY * 0.9 },
+                'Infrastructure':      { x: cx - spreadX*0.6,y: cy + spreadY * 0.9 },
+                'Business':            { x: cx - spreadX,    y: cy - spreadY * 0.2 },
+            };
+
+            // Assign target cluster center to each course
+            courses.forEach(function(c) {
+                c.clusterX = catPos[c.cat].x;
+                c.clusterY = catPos[c.cat].y;
+            });
+
+            // Use force simulation to resolve overlaps
+            clusterSim = d3.forceSimulation(courses)
+                .force('x', d3.forceX(function(d) { return d.clusterX; }).strength(0.4))
+                .force('y', d3.forceY(function(d) { return d.clusterY; }).strength(0.4))
+                .force('collision', d3.forceCollide().radius(function(d) { return rScale(d.score) + 2; }).strength(0.8))
+                .alpha(0.8)
+                .alphaDecay(0.03)
+                .on('tick', function() {
+                    elemGroup.selectAll('.course-dot')
+                        .attr('cx', function(d) { return d.x; })
+                        .attr('cy', function(d) { return d.y; });
+                });
+
+            elemGroup.selectAll('.course-dot')
+                .attr('r', function(d) { return rScale(d.score); })
+                .attr('fill', function(d) { return catColor[d.cat]; })
+                .attr('opacity', 0.85);
+
+            // Category labels
+            labelGroup.selectAll('*').transition().duration(300).style('opacity', 0).remove();
+            var catGroups = {};
+            courses.forEach(function(c) {
+                if (!catGroups[c.cat]) catGroups[c.cat] = [];
+                catGroups[c.cat].push(c);
+            });
+            Object.entries(catPos).forEach(function(entry) {
+                var cat = entry[0], pos = entry[1];
+                var group = catGroups[cat] || [];
+                var maxR = d3.max(group, function(d) { return rScale(d.score); }) || 20;
+                var clusterR = Math.sqrt(group.length) * (maxR + 4);
+                labelGroup.append('text')
+                    .attr('class', 'cat-label')
+                    .attr('x', pos.x)
+                    .attr('y', pos.y - clusterR - 12)
+                    .text(cat)
+                    .style('opacity', 0)
+                    .transition().delay(600).duration(400)
+                    .style('opacity', 1);
+            });
+        }
+
+        function showTimeline() {
+            labelGroup.selectAll('*').transition().duration(300).style('opacity', 0).remove();
+            techGroup.transition().duration(400).style('opacity', 0);
+            elemGroup.selectAll('.lollipop-line').transition().duration(400).style('opacity', 0).remove();
+            simulation.stop();
+            if (clusterSim) { clusterSim.stop(); clusterSim = null; }
+
+            const plotW = width - margin.left - margin.right;
+            const plotH = height - margin.top - margin.bottom;
+
+            const xScale = d3.scalePoint()
+                .domain(['2022-2023', '2023-2024', '2024-2025', '2025-2026'])
+                .range([margin.left, margin.left + plotW])
+                .padding(0.3);
+
+            const yScale = d3.scaleLinear()
+                .domain([12, 21])
+                .range([margin.top + plotH, margin.top]);
+
+            // Show axes
+            xAxisG.attr('transform', 'translate(0,' + (margin.top + plotH) + ')')
+                .call(d3.axisBottom(xScale).tickSize(0).tickPadding(12));
+            yAxisG.attr('transform', 'translate(' + margin.left + ',0)')
+                .call(d3.axisLeft(yScale).tickValues([12,13,14,15,16,17,18,19,20]).tickFormat(d => d + '/20').tickSize(-plotW));
+            yAxisG.selectAll('.tick line').attr('stroke', 'rgba(148,163,184,0.2)').attr('stroke-dasharray', '3,3');
+            yAxisG.selectAll('.tick').each(function(d) {
+                const line = d3.select(this).select('line');
+                if (d % 2 === 0) line.attr('stroke', 'rgba(148,163,184,0.35)');
+            });
+            yAxisG.select('.domain').remove();
+
+            axisGroup.transition().duration(500).style('opacity', 1);
+
+            // Jitter within year groups to avoid overlap
+            const yearGroups = {};
+            courses.forEach(d => {
+                if (!yearGroups[d.period]) yearGroups[d.period] = [];
+                yearGroups[d.period].push(d);
+            });
+
+            elemGroup.selectAll('.course-dot')
+                .transition().duration(800).ease(d3.easeCubicInOut)
+                .attr('cx', d => {
+                    const group = yearGroups[d.period];
+                    const idx = group.indexOf(d);
+                    const jitter = (idx - (group.length - 1) / 2) * 20;
+                    return xScale(d.period) + jitter;
+                })
+                .attr('cy', d => yScale(d.score))
+                .attr('r', d => rScale(d.score) * 0.8)
+                .attr('fill', d => catColor[d.cat])
+                .attr('opacity', 0.85);
+        }
+
+        function showScores() {
+            labelGroup.selectAll('*').transition().duration(300).style('opacity', 0).remove();
+            techGroup.transition().duration(400).style('opacity', 0);
+            simulation.stop();
+
+            const sorted = [...courses].sort((a, b) => b.score - a.score || a.name.localeCompare(b.name));
+            const plotW = width - margin.left - margin.right;
+            const barH = Math.min(28, (height - margin.top - margin.bottom) / sorted.length - 4);
+
+            const xScale = d3.scaleLinear().domain([0, 20]).range([margin.left, margin.left + plotW]);
+            const yScale = d3.scaleBand()
+                .domain(sorted.map(d => d.id))
+                .range([margin.top, margin.top + sorted.length * (barH + 6)])
+                .padding(0.15);
+
+            // Hide standard axes, show custom
+            axisGroup.transition().duration(300).style('opacity', 0);
+
+            // Lollipop lines
+            elemGroup.selectAll('.lollipop-line').remove();
+            sorted.forEach(d => {
+                elemGroup.append('line')
+                    .attr('class', 'lollipop-line')
+                    .attr('x1', xScale(0))
+                    .attr('y1', yScale(d.id) + yScale.bandwidth() / 2)
+                    .attr('x2', xScale(0))
+                    .attr('y2', yScale(d.id) + yScale.bandwidth() / 2)
+                    .attr('stroke', d.score === 20 ? '#f59e0b' : catColor[d.cat])
+                    .attr('opacity', 0.4)
+                    .transition().delay(300).duration(600)
+                    .attr('x2', xScale(d.score));
+            });
+
+            // Course name labels
+            sorted.forEach(d => {
+                labelGroup.append('text')
+                    .attr('class', 'bar-label')
+                    .attr('x', margin.left - 8)
+                    .attr('y', yScale(d.id) + yScale.bandwidth() / 2)
+                    .attr('text-anchor', 'end')
+                    .attr('dominant-baseline', 'central')
+                    .text(d.short)
+                    .style('opacity', 0)
+                    .transition().delay(200).duration(400)
+                    .style('opacity', 1);
+            });
+
+            // Score labels
+            sorted.forEach(d => {
+                labelGroup.append('text')
+                    .attr('class', 'score-label')
+                    .attr('x', xScale(d.score) + 18)
+                    .attr('y', yScale(d.id) + yScale.bandwidth() / 2)
+                    .attr('dominant-baseline', 'central')
+                    .attr('fill', d.score === 20 ? '#f59e0b' : '#64748b')
+                    .text(d.score + '/20')
+                    .style('opacity', 0)
+                    .transition().delay(600).duration(400)
+                    .style('opacity', 1);
+            });
+
+            // Move dots to end of bars
+            elemGroup.selectAll('.course-dot')
+                .transition().duration(800).ease(d3.easeCubicInOut)
+                .attr('cx', d => xScale(d.score))
+                .attr('cy', d => yScale(d.id) + yScale.bandwidth() / 2)
+                .attr('r', barH / 2.5)
+                .attr('fill', d => d.score === 20 ? '#f59e0b' : catColor[d.cat])
+                .attr('opacity', 1);
+        }
+
+        function showTech() {
+            // Hide course elements
+            elemGroup.selectAll('.course-dot')
+                .transition().duration(400)
+                .attr('r', 0).attr('opacity', 0);
+            elemGroup.selectAll('.lollipop-line')
+                .transition().duration(400).style('opacity', 0).remove();
+            labelGroup.selectAll('*').transition().duration(300).style('opacity', 0).remove();
+            axisGroup.transition().duration(300).style('opacity', 0);
+            simulation.stop();
+
+            // Pack layout
+            const packSize = Math.min(width, height) * 0.85;
+            const root = d3.hierarchy({ children: techData })
+                .sum(d => d.count || 0);
+
+            d3.pack()
+                .size([packSize, packSize])
+                .padding(4)(root);
+
+            const offsetX = (width - packSize) / 2;
+            const offsetY = (height - packSize) / 2;
+
+            const leaves = root.leaves();
+
+            // Create tech circles
+            techGroup.selectAll('.tech-bubble').remove();
+            techGroup.selectAll('.tech-label').remove();
+
+            const bubbles = techGroup.selectAll('.tech-bubble')
+                .data(leaves)
+                .join('circle')
+                .attr('class', 'tech-bubble')
+                .attr('cx', d => d.x + offsetX)
+                .attr('cy', d => d.y + offsetY)
+                .attr('r', 0)
+                .attr('fill', d => techDomainColor[d.data.domain] || '#3b82f6')
+                .attr('opacity', 0.8)
+                .attr('stroke', 'white')
+                .attr('stroke-width', 2);
+
+            bubbles.transition().delay((d, i) => i * 30).duration(500)
+                .attr('r', d => d.r);
+
+            // Labels for larger bubbles
+            techGroup.selectAll('.tech-label')
+                .data(leaves.filter(d => d.r > 18))
+                .join('text')
+                .attr('class', 'tech-label')
+                .attr('x', d => d.x + offsetX)
+                .attr('y', d => d.y + offsetY)
+                .attr('text-anchor', 'middle')
+                .attr('dominant-baseline', 'central')
+                .attr('fill', 'white')
+                .attr('font-family', 'Inter, sans-serif')
+                .attr('font-weight', '600')
+                .attr('font-size', d => Math.max(9, Math.min(d.r * 0.45, 14)) + 'px')
+                .text(d => d.data.name)
+                .style('opacity', 0)
+                .style('pointer-events', 'none')
+                .transition().delay((d, i) => 300 + i * 30).duration(400)
+                .style('opacity', 1);
+
+            // Tooltip on tech bubbles
+            bubbles
+                .on('mouseenter', function (event, d) {
+                    d3.select(this).attr('stroke-width', 3).attr('stroke', '#0f172a');
+                    tooltip.style('opacity', 1).html(
+                        '<strong>' + d.data.name + '</strong>' +
+                        'Gebruikt in ' + d.data.count + (d.data.count === 1 ? ' vak' : ' vakken')
+                    );
+                })
+                .on('mousemove', function (event) {
+                    tooltip.style('left', (event.clientX + 14) + 'px')
+                           .style('top', (event.clientY - 10) + 'px');
+                })
+                .on('mouseleave', function () {
+                    d3.select(this).attr('stroke-width', 2).attr('stroke', 'white');
+                    tooltip.style('opacity', 0);
+                });
+
+            techGroup.transition().duration(400).style('opacity', 1);
+        }
+
+        // === STATE DISPATCHER ===
+        function updateViz(stepIndex) {
+            if (stepIndex === currentStep) return;
+            currentStep = stepIndex;
+            switch (stepIndex) {
+                case 0: showCloud(); break;
+                case 1: showClusters(); break;
+                case 2: showTimeline(); break;
+                case 3: showScores(); break;
+                case 4: showTech(); break;
+            }
+        }
+
+        // === SCROLL OBSERVER (replaces Scrollama) ===
+        function setupObserver() {
+            const steps = document.querySelectorAll('#scrolly .step');
+            var viewMid = window.innerHeight / 2;
+            function onScroll() {
+                var closest = null;
+                var closestDist = Infinity;
+                steps.forEach(function (step, i) {
+                    var rect = step.getBoundingClientRect();
+                    var mid = rect.top + rect.height / 2;
+                    var dist = Math.abs(mid - viewMid);
+                    if (dist < closestDist) {
+                        closestDist = dist;
+                        closest = i;
+                    }
+                });
+                if (closest !== null) {
+                    d3.selectAll('#scrolly .step').classed('is-active', false);
+                    d3.select(steps[closest]).classed('is-active', true);
+                    updateViz(closest);
+                    if (closest > 0) {
+                        d3.select('#scrollHint').classed('hidden', true);
+                    }
+                }
+            }
+            window.addEventListener('scroll', onScroll, { passive: true });
+        }
+
+        // === RESIZE ===
+        function handleResize() {
+            getDimensions();
+            simulation.force('center', d3.forceCenter(width / 2, height / 2));
+            if (currentStep >= 0) {
+                const step = currentStep;
+                currentStep = -1;
+                updateViz(step);
+            }
+        }
+
+        // === INIT ===
+        init();
+        setupObserver();
+        // Trigger first state with entrance animation
+        updateViz(0);
+        elemGroup.selectAll('.course-dot')
+            .transition().delay(function (d, i) { return i * 60; }).duration(500)
+            .attr('opacity', 0.8)
+            .attr('r', function (d) { return rScale(d.score); });
+
+        window.addEventListener('resize', handleResize);
+
+        // Navbar scroll effect
+        var nav = document.getElementById('mainNav');
+        window.addEventListener('scroll', function() {
+            nav.classList.toggle('scrolled', window.scrollY > 100);
+        });
+
+        // Mobile menu
+        document.querySelector('.navbar-toggle').addEventListener('click', function() {
+            document.querySelector('.navbar-nav').classList.toggle('active');
+        });
+
+    })();
+    </script>
+</body>
+</html>

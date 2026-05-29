@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>CV tabel varianten</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f1f5f9;
+            padding: 20px;
+            color: #1e293b;
+        }
+        .variant {
+            background: #fff;
+            padding: 25px 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 8px rgba(0,0,0,0.1);
+            max-width: 500px;
+        }
+        .variant h3 {
+            font-size: 10pt;
+            color: #64748b;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .intro {
+            font-size: 8.5pt;
+            color: #334155;
+            margin-bottom: 8px;
+        }
+
+        /* === Variant A: Huidige versie === */
+        .grades-a {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            border-top: 1.5px solid #0f172a;
+            margin-top: 6px;
+        }
+        .grades-a .g-name, .grades-a .g-score {
+            font-size: 8.5pt;
+            padding: 3.5px 0;
+            border-bottom: 0.5px solid #e2e8f0;
+        }
+        .grades-a .g-name { color: #334155; }
+        .grades-a .g-score { text-align: right; font-weight: 600; color: #0f172a; padding-left: 15px; }
+
+        /* === Variant B: Dot leaders === */
+        .grades-b {
+            margin-top: 6px;
+        }
+        .grades-b .row {
+            display: flex;
+            align-items: baseline;
+            font-size: 8.5pt;
+            padding: 2.5px 0;
+        }
+        .grades-b .g-name { color: #334155; }
+        .grades-b .dots {
+            flex: 1;
+            border-bottom: 1px dotted #cbd5e1;
+            margin: 0 4px;
+            min-width: 20px;
+            position: relative;
+            top: -3px;
+        }
+        .grades-b .g-score { font-weight: 600; color: #0f172a; }
+
+        /* === Variant C: Left accent bar === */
+        .grades-c {
+            margin-top: 6px;
+        }
+        .grades-c .row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 8.5pt;
+            padding: 3px 0 3px 8px;
+            border-left: 2.5px solid #e2e8f0;
+            margin-bottom: 1px;
+        }
+        .grades-c .row.perfect {
+            border-left-color: #3b82f6;
+        }
+        .grades-c .g-name { color: #334155; }
+        .grades-c .g-score { font-weight: 600; color: #0f172a; }
+
+        /* === Variant D: Twee kolommen compact === */
+        .grades-d {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2px 20px;
+            margin-top: 6px;
+        }
+        .grades-d .row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 8.5pt;
+            padding: 2.5px 0;
+            border-bottom: 0.5px solid #f1f5f9;
+        }
+        .grades-d .g-name { color: #334155; }
+        .grades-d .g-score { font-weight: 600; color: #0f172a; margin-left: 8px; }
+
+        /* === Variant E: Grouped met subtitels === */
+        .grades-e {
+            margin-top: 6px;
+        }
+        .grades-e .group-label {
+            font-size: 7.5pt;
+            font-weight: 600;
+            color: #3b82f6;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-top: 5px;
+            margin-bottom: 2px;
+        }
+        .grades-e .row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 8.5pt;
+            padding: 2.5px 0;
+        }
+        .grades-e .g-name { color: #334155; }
+        .grades-e .g-score { font-weight: 600; color: #0f172a; }
+    </style>
+</head>
+<body>
+
+<div class="variant">
+    <h3>A - Huidige versie (grid + navy top border)</h3>
+    <div class="intro">Specialisatie Data & AI. Gemiddelde 18.4/20.</div>
+    <div class="grades-a">
+        <span class="g-name">.NET Development</span><span class="g-score">20/20</span>
+        <span class="g-name">Data Visualisation</span><span class="g-score">20/20</span>
+        <span class="g-name">Requirements Analysis</span><span class="g-score">20/20</span>
+        <span class="g-name">React</span><span class="g-score">20/20</span>
+        <span class="g-name">Artificial Intelligence</span><span class="g-score">20/20</span>
+        <span class="g-name">Data Science</span><span class="g-score">19/20</span>
+        <span class="g-name">Application Development in Python</span><span class="g-score">19/20</span>
+        <span class="g-name">Data Analysis with SQL</span><span class="g-score">19/20</span>
+    </div>
+</div>
+
+<div class="variant">
+    <h3>B - Dot leaders (inhoudsopgave-stijl)</h3>
+    <div class="intro">Specialisatie Data & AI. Gemiddelde 18.4/20.</div>
+    <div class="grades-b">
+        <div class="row"><span class="g-name">.NET Development</span><span class="dots"></span><span class="g-score">20/20</span></div>
+        <div class="row"><span class="g-name">Data Visualisation</span><span class="dots"></span><span class="g-score">20/20</span></div>
+        <div class="row"><span class="g-name">Requirements Analysis</span><span class="dots"></span><span class="g-score">20/20</span></div>
+        <div class="row"><span class="g-name">React</span><span class="dots"></span><span class="g-score">20/20</span></div>
+        <div class="row"><span class="g-name">Artificial Intelligence</span><span class="dots"></span><span class="g-score">20/20</span></div>
+        <div class="row"><span class="g-name">Data Science</span><span class="dots"></span><span class="g-score">19/20</span></div>
+        <div class="row"><span class="g-name">Application Development in Python</span><span class="dots"></span><span class="g-score">19/20</span></div>
+        <div class="row"><span class="g-name">Data Analysis with SQL</span><span class="dots"></span><span class="g-score">19/20</span></div>
+    </div>
+</div>
+
+<div class="variant">
+    <h3>C - Left accent bar (blauw = 20/20)</h3>
+    <div class="intro">Specialisatie Data & AI. Gemiddelde 18.4/20.</div>
+    <div class="grades-c">
+        <div class="row perfect"><span class="g-name">.NET Development</span><span class="g-score">20/20</span></div>
+        <div class="row perfect"><span class="g-name">Data Visualisation</span><span class="g-score">20/20</span></div>
+        <div class="row perfect"><span class="g-name">Requirements Analysis</span><span class="g-score">20/20</span></div>
+        <div class="row perfect"><span class="g-name">React</span><span class="g-score">20/20</span></div>
+        <div class="row perfect"><span class="g-name">Artificial Intelligence</span><span class="g-score">20/20</span></div>
+        <div class="row"><span class="g-name">Data Science</span><span class="g-score">19/20</span></div>
+        <div class="row"><span class="g-name">Application Development in Python</span><span class="g-score">19/20</span></div>
+        <div class="row"><span class="g-name">Data Analysis with SQL</span><span class="g-score">19/20</span></div>
+    </div>
+</div>
+
+<div class="variant">
+    <h3>D - Twee kolommen compact</h3>
+    <div class="intro">Specialisatie Data & AI. Gemiddelde 18.4/20.</div>
+    <div class="grades-d">
+        <div class="row"><span class="g-name">.NET Development</span><span class="g-score">20/20</span></div>
+        <div class="row"><span class="g-name">Data Science</span><span class="g-score">19/20</span></div>
+        <div class="row"><span class="g-name">Data Visualisation</span><span class="g-score">20/20</span></div>
+        <div class="row"><span class="g-name">Python</span><span class="g-score">19/20</span></div>
+        <div class="row"><span class="g-name">Requirements Analysis</span><span class="g-score">20/20</span></div>
+        <div class="row"><span class="g-name">SQL</span><span class="g-score">19/20</span></div>
+        <div class="row"><span class="g-name">React</span><span class="g-score">20/20</span></div>
+        <div class="row"></div>
+        <div class="row"><span class="g-name">Artificial Intelligence</span><span class="g-score">20/20</span></div>
+    </div>
+</div>
+
+<div class="variant">
+    <h3>E - Gegroepeerd (20/20 vs 19/20)</h3>
+    <div class="intro">Specialisatie Data & AI. Gemiddelde 18.4/20.</div>
+    <div class="grades-e">
+        <div class="group-label">Maximumscore (20/20)</div>
+        <div class="row"><span class="g-name">.NET Development</span><span class="g-score">20/20</span></div>
+        <div class="row"><span class="g-name">Data Visualisation</span><span class="g-score">20/20</span></div>
+        <div class="row"><span class="g-name">Requirements Analysis</span><span class="g-score">20/20</span></div>
+        <div class="row"><span class="g-name">React</span><span class="g-score">20/20</span></div>
+        <div class="row"><span class="g-name">Artificial Intelligence</span><span class="g-score">20/20</span></div>
+        <div class="group-label">Overige topscores</div>
+        <div class="row"><span class="g-name">Data Science</span><span class="g-score">19/20</span></div>
+        <div class="row"><span class="g-name">Application Development in Python</span><span class="g-score">19/20</span></div>
+        <div class="row"><span class="g-name">Data Analysis with SQL</span><span class="g-score">19/20</span></div>
+    </div>
+</div>
+
+</body>
+</html>

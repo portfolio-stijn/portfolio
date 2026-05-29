@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV - Stijn De Beuckeleer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            font-size: 9pt;
+            line-height: 1.5;
+            color: #1e293b;
+            background: #fff;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .page {
+            width: 210mm;
+            height: 297mm;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 68mm 1fr;
+            grid-template-rows: 1fr;
+            overflow: hidden;
+        }
+
+        /* ===== Sidebar ===== */
+        .sidebar {
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 12mm 6mm 10mm 6mm;
+            display: flex;
+            flex-direction: column;
+            gap: 5mm;
+            min-height: 100%;
+        }
+
+        .avatar-wrap {
+            text-align: center;
+            margin-bottom: 3mm;
+        }
+
+        .sidebar-tagline {
+            font-size: 7.5pt;
+            font-style: italic;
+            color: #cfd8dc;
+            margin-top: 2.5mm;
+            line-height: 1.4;
+        }
+
+        .avatar {
+            width: 28mm;
+            height: 28mm;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2.5px solid #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2), 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .sidebar h2 {
+            font-size: 8.5pt;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #3b82f6;
+            margin-bottom: 2.5mm;
+            padding-bottom: 1.5mm;
+            border-bottom: 0.5px solid #334155;
+        }
+
+        .sidebar p, .sidebar li {
+            font-size: 8.5pt;
+            color: #cbd5e1;
+            line-height: 1.5;
+        }
+
+        .sidebar a {
+            color: #93c5fd;
+            text-decoration: none;
+        }
+
+        /* Contact */
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 2.5mm;
+            margin-bottom: 2mm;
+        }
+
+        .contact-item svg {
+            width: 11px;
+            height: 11px;
+            fill: #3b82f6;
+            flex-shrink: 0;
+            margin-top: 1.5px;
+        }
+
+        .contact-item span {
+            font-size: 8.5pt;
+            color: #cbd5e1;
+            word-break: break-all;
+        }
+
+        /* Skills */
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5mm;
+            margin-bottom: 2mm;
+        }
+
+        .skill-tag {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1mm 2.5mm;
+            border-radius: 2px;
+            font-size: 7.5pt;
+            font-weight: 500;
+            border: 0.5px solid #334155;
+        }
+
+        .skill-category {
+            font-size: 7.5pt;
+            font-weight: 600;
+            color: #94a3b8;
+            margin-bottom: 1mm;
+            margin-top: 1.5mm;
+        }
+
+        /* Talen */
+        .lang-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5mm;
+        }
+
+        .lang-item span:first-child {
+            font-weight: 500;
+            color: #e2e8f0;
+        }
+
+        .lang-item span:last-child {
+            color: #94a3b8;
+            font-size: 8.5pt;
+        }
+
+        /* Interesses */
+        .sidebar .interests {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar .interests li {
+            padding: 0.5mm 0;
+            font-size: 8.5pt;
+        }
+
+        .sidebar .interests li::before {
+            content: "";
+            display: inline-block;
+            width: 4px;
+            height: 4px;
+            background: #3b82f6;
+            border-radius: 50%;
+            margin-right: 2mm;
+            vertical-align: middle;
+        }
+
+        /* Sidebar page 2 */
+        .sidebar-p2 {
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 12mm 6mm 10mm 6mm;
+            display: flex;
+            flex-direction: column;
+            gap: 5mm;
+            min-height: 100%;
+        }
+
+        .sidebar-p2 h2 {
+            font-size: 8.5pt;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #3b82f6;
+            margin-bottom: 2.5mm;
+            padding-bottom: 1.5mm;
+            border-bottom: 0.5px solid #334155;
+        }
+
+        .highlight-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 2.5mm;
+            margin-bottom: 3mm;
+        }
+
+        .highlight-icon {
+            width: 24px;
+            height: 24px;
+            background: rgba(59, 130, 246, 0.15);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .highlight-icon svg {
+            width: 13px;
+            height: 13px;
+            fill: #3b82f6;
+        }
+
+        .highlight-label {
+            font-size: 7pt;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5mm;
+        }
+
+        .highlight-value {
+            font-size: 8.5pt;
+            color: #e2e8f0;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        /* ===== Main content ===== */
+        .main {
+            padding: 10mm 8mm 10mm 9mm;
+        }
+
+        .main-p2 {
+            padding: 10mm 8mm 10mm 9mm;
+        }
+
+        /* Header */
+        .header {
+            margin-bottom: 6mm;
+            padding-bottom: 4mm;
+            border-bottom: 2px solid #0f172a;
+        }
+
+        .header h1 {
+            font-size: 24pt;
+            font-weight: 700;
+            color: #0f172a;
+            letter-spacing: -0.5px;
+            line-height: 1.1;
+        }
+
+        .header .subtitle {
+            font-size: 12pt;
+            font-weight: 400;
+            color: #3b82f6;
+            margin-top: 1.5mm;
+        }
+
+        .header .tagline {
+            font-size: 9.5pt;
+            font-style: italic;
+            color: #0f172a;
+            margin-top: 3mm;
+        }
+
+        /* Sections */
+        .section {
+            margin-bottom: 5mm;
+        }
+
+        .section-title {
+            font-size: 10pt;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: #0f172a;
+            margin-top: 3mm;
+            margin-bottom: 3mm;
+            padding-bottom: 1.5mm;
+            padding-left: 3mm;
+            border-bottom: 1.5px solid #e2e8f0;
+            border-left: 3px solid #3b82f6;
+        }
+
+        /* Profiel */
+        .profile p {
+            font-size: 9pt;
+            color: #334155;
+            line-height: 1.65;
+        }
+
+        /* Experience timeline */
+        .experience-timeline {
+            position: relative;
+            padding-left: 5mm;
+        }
+
+        .experience-timeline::before {
+            content: "";
+            position: absolute;
+            left: 3px;
+            top: 2mm;
+            bottom: 2mm;
+            width: 1.5px;
+            background: linear-gradient(to bottom, #3b82f6, #e2e8f0);
+        }
+
+        /* Experience items */
+        .exp-item {
+            margin-bottom: 4mm;
+            page-break-inside: avoid;
+            position: relative;
+        }
+
+        .experience-timeline .exp-item::before {
+            content: "";
+            position: absolute;
+            left: calc(-5mm - 0.5px);
+            top: 2px;
+            width: 7px;
+            height: 7px;
+            background: #3b82f6;
+            border-radius: 50%;
+            border: 1.5px solid #fff;
+            z-index: 1;
+        }
+
+        .exp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 0.5mm;
+        }
+
+        .exp-title {
+            font-size: 10pt;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .exp-date {
+            font-size: 8.5pt;
+            color: #64748b;
+            font-weight: 500;
+            white-space: nowrap;
+            margin-left: 3mm;
+        }
+
+        .exp-company {
+            font-size: 8.5pt;
+            color: #64748b;
+            font-style: italic;
+            margin-bottom: 1mm;
+        }
+
+        .exp-item ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .exp-item li {
+            font-size: 8.5pt;
+            color: #334155;
+            padding: 0.4mm 0;
+            padding-left: 3.5mm;
+            position: relative;
+            line-height: 1.5;
+        }
+
+        .exp-item li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 6px;
+            width: 3.5px;
+            height: 3.5px;
+            background: #3b82f6;
+            border-radius: 50%;
+        }
+
+        /* Education items */
+        .edu-item {
+            margin-bottom: 3mm;
+        }
+
+        .edu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .edu-title {
+            font-size: 9.5pt;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .edu-date {
+            font-size: 8.5pt;
+            color: #64748b;
+            font-weight: 500;
+            white-space: nowrap;
+            margin-left: 3mm;
+        }
+
+        .edu-company {
+            font-size: 8.5pt;
+            color: #64748b;
+            font-style: italic;
+        }
+
+        .edu-detail {
+            font-size: 8.5pt;
+            color: #334155;
+            margin-top: 1.5mm;
+        }
+
+        /* Grades table */
+        .grades-grid {
+            width: 80%;
+            margin: 2mm auto 4mm auto;
+            border-top: 1.5px solid #0f172a;
+        }
+
+        .grades-grid .grade-row {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 0.5px solid #e2e8f0;
+        }
+
+        .grades-grid .g-name,
+        .grades-grid .g-score {
+            font-size: 8.5pt;
+            padding: 1mm 0;
+        }
+
+        .grades-grid .g-name {
+            color: #334155;
+        }
+
+        .grades-grid .g-score {
+            text-align: right;
+            font-weight: 600;
+            color: #0f172a;
+            padding-left: 4mm;
+            white-space: nowrap;
+        }
+
+        /* Print */
+        @media print {
+            body { margin: 0; padding: 0; }
+            .page {
+                margin: 0;
+                width: 100%;
+                height: 100vh;
+                page-break-after: always;
+                break-after: page;
+            }
+            .page:last-child {
+                page-break-after: avoid;
+                break-after: avoid;
+            }
+        }
+
+        /* Screen preview */
+        @media screen {
+            body {
+                background: #e2e8f0;
+                padding: 10mm 0;
+            }
+            .page {
+                box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+                margin-bottom: 10mm;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ==================== PAGE 1 ==================== -->
+    <div class="page">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="avatar-wrap">
+                <img src="profiel.png" alt="Stijn De Beuckeleer" class="avatar">
+                <div class="sidebar-tagline">"Wie niet wil zoekt een reden, wie wil zoekt een mogelijkheid"</div>
+            </div>
+
+            <section>
+                <h2>Contact</h2>
+                <div class="contact-item">
+                    <svg viewBox="0 0 24 24"><path d="M0 3v18h24v-18h-24zm21.518 2l-9.518 7.713-9.518-7.713h19.036zm-19.518 14v-11.817l10 8.104 10-8.104v11.817h-20z"/></svg>
+                    <span>info@debeuckeleer.eu</span>
+                </div>
+                <div class="contact-item">
+                    <svg viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    <span>github.com/stijn-portfolio</span>
+                </div>
+                <div class="contact-item">
+                    <svg viewBox="0 0 24 24"><path d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/></svg>
+                    <span>Kempen, Provincie Antwerpen</span>
+                </div>
+            </section>
+
+            <section>
+                <h2>Vaardigheden</h2>
+                <div class="skill-category">Data & BI</div>
+                <div class="skill-tags">
+                    <span class="skill-tag">SQL</span>
+                    <span class="skill-tag">Power BI</span>
+                    <span class="skill-tag">DAX</span>
+                    <span class="skill-tag">Microsoft Fabric</span>
+                    <span class="skill-tag">Pandas</span>
+                    <span class="skill-tag">ETL/ELT</span>
+                </div>
+                <div class="skill-category">Programmeren</div>
+                <div class="skill-tags">
+                    <span class="skill-tag">Python</span>
+                    <span class="skill-tag">C# / .NET</span>
+                    <span class="skill-tag">Java</span>
+                    <span class="skill-tag">PHP</span>
+                    <span class="skill-tag">React</span>
+                    <span class="skill-tag">Angular</span>
+                    <span class="skill-tag">HTML/CSS/JS</span>
+                </div>
+                <div class="skill-category">Cloud & tools</div>
+                <div class="skill-tags">
+                    <span class="skill-tag">Azure</span>
+                    <span class="skill-tag">SharePoint Dev</span>
+                    <span class="skill-tag">Git</span>
+                    <span class="skill-tag">VS Code</span>
+                    <span class="skill-tag">Linux</span>
+                </div>
+            </section>
+
+            <section>
+                <h2>Talen</h2>
+                <div class="lang-item">
+                    <span>Nederlands</span>
+                    <span>Moedertaal</span>
+                </div>
+                <div class="lang-item">
+                    <span>Engels</span>
+                    <span>Professioneel</span>
+                </div>
+                <div class="lang-item">
+                    <span>Frans</span>
+                    <span>Goed</span>
+                </div>
+            </section>
+
+            <section>
+                <h2>Interesses</h2>
+                <ul class="interests">
+                    <li>Data-analyse en visualisatie</li>
+                    <li>Technologische innovatie</li>
+                    <li>Lopen (marathon 03:37)</li>
+                    <li>Skien (monitor)</li>
+                    <li>Motorrijden, via ferrata</li>
+                </ul>
+            </section>
+        </aside>
+
+        <!-- Main Content Page 1 -->
+        <main class="main">
+            <header class="header">
+                <h1>Stijn De Beuckeleer</h1>
+                <div class="subtitle">Application Development | Data & AI</div>
+            </header>
+
+            <section class="section profile">
+                <h2 class="section-title">Profiel</h2>
+                <p>
+                    Gedreven professional met ruim 25 jaar ervaring in data-analyse en het beheren van grote datasets bij de Federale Gerechtelijke Politie. Als diensthoofd OSINT leid ik een team dat open source data verzamelt, analyseert en omzet naar bruikbare inzichten.
+                </p>
+                <p style="margin-top: 2mm;">
+                    Doorheen mijn carriere ontwikkelde ik telefonieverwerkingstools, operationele databanken en casemanagement-applicaties die jarenlang operationeel in gebruik waren. In meerdere spraakmakende onderzoeken was technologie en data-analyse de beslissende factor.
+                </p>
+                <p style="margin-top: 2mm;">
+                    In 2022 startte ik een Bachelor Toegepaste Informatica aan Thomas More om die praktijkervaring te formaliseren, met een gemiddelde van 18.4/20.
+                </p>
+            </section>
+
+            <section class="section">
+                <h2 class="section-title">Werkervaring</h2>
+
+                <div class="experience-timeline">
+                    <div class="exp-item">
+                        <div class="exp-header">
+                            <span class="exp-title">Diensthoofd OSINT</span>
+                            <span class="exp-date">2024 - heden</span>
+                        </div>
+                        <div class="exp-company">Federale Gerechtelijke Politie Antwerpen - Gerechtelijk Commissaris</div>
+                        <ul>
+                            <li>Leiding over het Open Source Intelligence team: verzamelen, scrapen en analyseren van open source data</li>
+                            <li>Ontwikkeling casemanagement-tool op SharePoint voor intake en afhandeling OSINT-dossiers</li>
+                            <li>Ontvangst door de Koning naar aanleiding van operatie Limit (Sky ECC)</li>
+                        </ul>
+                    </div>
+
+                    <div class="exp-item">
+                        <div class="exp-header">
+                            <span class="exp-title">BTS Officier - Bijzondere Technieken</span>
+                            <span class="exp-date">2018 - 2024</span>
+                        </div>
+                        <div class="exp-company">Federale Gerechtelijke Politie Antwerpen - Gerechtelijk Commissaris</div>
+                        <ul>
+                            <li>Leidinggevende kernteam operatie Limit (Sky ECC): 1 miljard versleutelde berichten onderschept en verwerkt in samenwerking met internationale partners</li>
+                            <li>Ontwikkeling casemanagement-tool op SharePoint voor 80+ onderzoekers in dossier Edge, doorstart van operatie Limit</li>
+                        </ul>
+                    </div>
+
+                    <div class="exp-item">
+                        <div class="exp-header">
+                            <span class="exp-title">Adjunct teamchef / Rechercheur</span>
+                            <span class="exp-date">2010 - 2018</span>
+                        </div>
+                        <div class="exp-company">Federale Gerechtelijke Politie Antwerpen - Afdelingen Drugs en Goederen</div>
+                        <ul>
+                            <li>Dossier Oceans 13: doorbraak in onderzoek naar drugsinvoer via hackingtechnieken, wereldwijde aandacht op internationale politiefora</li>
+                            <li>Presentatie European Crime Analysis Conference, Kopenhagen (2016)</li>
+                            <li>Ontwikkeling afdelingssite drugs op SharePoint en informatiestroom multidisciplinair Kaliteam</li>
+                            <li>Erkend specialist telefonieonderzoek en data-analyse</li>
+                        </ul>
+                    </div>
+
+                    <div class="exp-item">
+                        <div class="exp-header">
+                            <span class="exp-title">Misdrijfanalist / Rechercheur</span>
+                            <span class="exp-date">1998 - 2010</span>
+                        </div>
+                        <div class="exp-company">Centraal Bureau der Opsporingen - Federale Gerechtelijke Politie Antwerpen</div>
+                        <ul>
+                            <li>Ontwikkeling van meerdere operationele databanken voor telefonieonderzoek, tot 2017 operationeel in gebruik bij verschillende eenheden</li>
+                            <li>Meerdere doorbraken in complexe dossiers via diepgaand telefonieonderzoek</li>
+                            <li>Medeontwikkeling DARE/DONNA preventieproject drugs voor lagere scholen</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- ==================== PAGE 2 ==================== -->
+    <div class="page">
+        <aside class="sidebar-p2">
+            <section>
+                <h2>Profiel</h2>
+
+                <div class="highlight-item">
+                    <div class="highlight-icon">
+                        <svg viewBox="0 0 24 24"><path d="M2 0v24h20v-24h-20zm18 22h-16v-15h16v15zm-3-4h-10v-1h10v1zm0-3h-10v-1h10v1zm0-3h-10v-1h10v1zm-2-4h-8v-3h8v3z"/></svg>
+                    </div>
+                    <div>
+                        <div class="highlight-label">Ervaring</div>
+                        <div class="highlight-value">25+ jaar data-analyse en operationeel onderzoek</div>
+                    </div>
+                </div>
+
+                <div class="highlight-item">
+                    <div class="highlight-icon">
+                        <svg viewBox="0 0 24 24"><path d="M20 12.875v5.068c0 2.754-5.789 4.057-9 4.057-3.052 0-9-1.392-9-4.057v-6.294l9 4.863 9-3.637zm-18.274-2.739l9.274 5.007 10.274-4.163-10.274-4.98-9.274 4.136zm22.274-1.272l-13-5.864-13 5.864 13 7.016 13-7.016z"/></svg>
+                    </div>
+                    <div>
+                        <div class="highlight-label">Opleiding</div>
+                        <div class="highlight-value">Gemiddelde 18.4/20, 5x maximale score</div>
+                    </div>
+                </div>
+
+                <div class="highlight-item">
+                    <div class="highlight-icon">
+                        <svg viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                    </div>
+                    <div>
+                        <div class="highlight-label">Erkenning</div>
+                        <div class="highlight-value">Ontvangst Koning Filip, operatie Sky ECC</div>
+                    </div>
+                </div>
+
+                <div class="highlight-item">
+                    <div class="highlight-icon">
+                        <svg viewBox="0 0 24 24"><path d="M17.997 18h-11.995l-.002-.623c0-1.259.1-1.986 1.588-2.33 1.684-.389 3.344-.736 2.545-2.209-2.366-4.363-.674-6.838 1.866-6.838 2.491 0 4.226 2.383 1.866 6.839-.775 1.464.826 1.812 2.545 2.209 1.49.344 1.589 1.072 1.589 2.333l-.002.619zm4.811-2.214c-1.29-.298-2.49-.559-1.909-1.657 1.769-3.342.469-5.129-1.4-5.129-1.265 0-2.248.817-2.248 2.324 0 3.903 4.999 1.905 5.559 6.676h3.19v-.459c-.001-.952-.072-1.494-1.192-1.755zm-22.806 2.214h3.191c.56-4.771 5.56-2.773 5.56-6.676 0-1.507-.983-2.324-2.249-2.324-1.869 0-3.169 1.787-1.399 5.129.581 1.099-.619 1.359-1.909 1.657-1.12.261-1.192.803-1.192 1.755v.459z"/></svg>
+                    </div>
+                    <div>
+                        <div class="highlight-label">Leiderschap</div>
+                        <div class="highlight-value">Diensthoofd OSINT, teamleider bij internationale operaties</div>
+                    </div>
+                </div>
+            </section>
+        </aside>
+
+        <main class="main-p2">
+            <section class="section">
+                <h2 class="section-title">Stage</h2>
+                <div class="exp-item">
+                    <div class="exp-header">
+                        <span class="exp-title">Project Hawkeye - 360-graden medewerkeroverzicht</span>
+                        <span class="exp-date">feb - mei 2026</span>
+                    </div>
+                    <div class="exp-company">Algorhythm, Turnhout</div>
+                    <ul>
+                        <li>Data-integratie van HR-, project- en financiele bronnen tot een 360-graden medewerkeroverzicht</li>
+                        <li>Data engineering: ETL/ELT pipelines in Microsoft Fabric (lakehouse, notebooks, pipelines)</li>
+                        <li>Datavisualisatie: interactieve Power BI-rapporten</li>
+                        <li>AI-ondersteunde ontwikkeling: inzet van generatieve AI voor code-assistentie, datamodellering en rapportontwerp</li>
+                        <li>Technologieen: Microsoft Fabric, Power BI, Python, DAX, SQL, generatieve AI</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2 class="section-title">Opleiding</h2>
+
+                <div class="edu-item">
+                    <div class="edu-header">
+                        <span class="edu-title">Bachelor Toegepaste Informatica - Application Development</span>
+                        <span class="edu-date">2022 - heden</span>
+                    </div>
+                    <div class="edu-company">Thomas More Geel (werktraject)</div>
+                    <div class="edu-detail" style="text-align: center;">Specialisatie Data & AI. Gemiddelde 18.4/20. Sterkste scores:</div>
+                    <div class="grades-grid">
+                        <div class="grade-row perfect"><span class="g-name">.NET Development</span><span class="g-score">20/20</span></div>
+                        <div class="grade-row perfect"><span class="g-name">Data Visualisation</span><span class="g-score">20/20</span></div>
+                        <div class="grade-row perfect"><span class="g-name">Requirements Analysis</span><span class="g-score">20/20</span></div>
+                        <div class="grade-row perfect"><span class="g-name">React</span><span class="g-score">20/20</span></div>
+                        <div class="grade-row perfect"><span class="g-name">Artificial Intelligence</span><span class="g-score">20/20</span></div>
+                        <div class="grade-row excellent"><span class="g-name">Data Science</span><span class="g-score">19/20</span></div>
+                        <div class="grade-row excellent"><span class="g-name">Application Development in Python</span><span class="g-score">19/20</span></div>
+                        <div class="grade-row excellent"><span class="g-name">Data Analysis with SQL</span><span class="g-score">19/20</span></div>
+                    </div>
+                </div>
+
+                <div class="edu-item">
+                    <div class="edu-header">
+                        <span class="edu-title">Opleiding operationele misdrijfanalist</span>
+                        <span class="edu-date">2000</span>
+                    </div>
+                    <div class="edu-company">Federale Politie</div>
+                </div>
+
+                <div class="edu-item">
+                    <div class="edu-header">
+                        <span class="edu-title">Koninklijke Rijkswachtschool voor Keuronderofficieren</span>
+                        <span class="edu-date">1995 - 1998</span>
+                    </div>
+                    <div class="edu-detail">Klasoverste, prijs van verdienste.</div>
+                </div>
+
+                <div class="edu-item">
+                    <div class="edu-header">
+                        <span class="edu-title">Kandidatuur Economie</span>
+                        <span class="edu-date">1992 - 1995</span>
+                    </div>
+                    <div class="edu-company">Handelshogeschool Antwerpen</div>
+                    <div class="edu-detail">Afgestudeerd met onderscheiding.</div>
+                </div>
+
+                <div class="edu-item">
+                    <div class="edu-header">
+                        <span class="edu-title">Latijn-Wiskunde</span>
+                        <span class="edu-date">1986 - 1992</span>
+                    </div>
+                    <div class="edu-company">St Aloysiuscollege Geel</div>
+                </div>
+            </section>
+
+            <section class="section" style="margin-top: 3mm;">
+                <h2 class="section-title">Referenties</h2>
+                <p style="font-size: 8pt; color: #64748b; margin-bottom: 2mm;">Contactgegevens beschikbaar op aanvraag.</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5mm 4mm;">
+                    <div style="font-size: 8pt; color: #334155;"><strong>Paul Van Tigchelt</strong><br><span style="color: #64748b;">Voormalig vice-eersteminister en minister van Justitie</span></div>
+                    <div style="font-size: 8pt; color: #334155;"><strong>Fr&#233;d&#233;ric Van Leeuw</strong><br><span style="color: #64748b;">Procureur-generaal Brussel, voormalig federaal procureur</span></div>
+                    <div style="font-size: 8pt; color: #334155;"><strong>Franky De Keyzer</strong><br><span style="color: #64748b;">Procureur des Konings, Antwerpen</span></div>
+                    <div style="font-size: 8pt; color: #334155;"><strong>Eva Herreman</strong><br><span style="color: #64748b;">Procureur-generaal Antwerpen, magistraat Bijzondere Opsporingsmethoden</span></div>
+                    <div style="font-size: 8pt; color: #334155;"><strong>Philippe Van Linthout</strong><br><span style="color: #64748b;">Onderzoeksrechter, Rechtbank Mechelen</span></div>
+                    <div style="font-size: 8pt; color: #334155;"><strong>Jan Kerkhofs</strong><br><span style="color: #64748b;">Federaal magistraat, autoriteit cybercrime</span></div>
+                    <div style="font-size: 8pt; color: #334155;"><strong>Yve Driesen</strong><br><span style="color: #64748b;">Gerechtelijk directeur, FGP Antwerpen</span></div>
+                    <div style="font-size: 8pt; color: #334155;"><strong>Wim Redig</strong><br><span style="color: #64748b;">Afdelingshoofd Cluster Intel, FGP Antwerpen</span></div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

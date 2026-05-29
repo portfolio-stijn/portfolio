@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230f172a'/><text x='16' y='22' font-family='system-ui' font-size='18' font-weight='700' fill='%233b82f6' text-anchor='middle'>S</text></svg>">
+    <meta name="description" content="Projecten van Stijn De Beuckeleer - school, stage en persoonlijk">
+    <title>Projecten | Stijn De Beuckeleer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/devicon.min.css">
+    <style>
+        /* === Rich Project Cards === */
+        .project-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .project-card-rich {
+            display: flex;
+            flex-direction: row;
+            padding: 0;
+            overflow: hidden;
+            height: 280px;
+            transform: none;
+        }
+
+        .project-card-rich:hover {
+            transform: none;
+        }
+
+        .project-card-body {
+            flex: 1;
+            padding: 1.75rem;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            overflow: hidden;
+        }
+
+        .project-card-thumb {
+            width: 300px;
+            flex-shrink: 0;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .project-card-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top left;
+            transition: transform 0.35s ease;
+        }
+
+        .project-card-thumb::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36' fill='white' viewBox='0 0 24 24'%3E%3Cpath d='M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3Cpath d='M12 10h-2v2H9v-2H7V9h2V7h1v2h2v1z'/%3E%3C/svg%3E") no-repeat center center;
+            opacity: 0;
+            transition: all 0.35s ease;
+        }
+
+        .project-card-thumb:hover img {
+            transform: scale(1.05);
+        }
+
+        .project-card-thumb:hover::after {
+            background-color: rgba(0, 0, 0, 0.4);
+            opacity: 1;
+        }
+
+        .project-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .project-card-header > div {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .project-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-light);
+            transition: background 0.2s, color 0.2s;
+            flex-shrink: 0;
+        }
+
+        .project-link:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .project-card-rich h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .project-context {
+            font-size: 0.85rem;
+            color: var(--primary-color);
+            font-weight: 500;
+            margin-bottom: 0.75rem !important;
+        }
+
+        .project-card-rich .project-desc {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            flex: 1;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+        }
+
+        .project-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: auto;
+            padding-top: 0.75rem;
+            gap: 1rem;
+        }
+
+        .project-type {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            white-space: nowrap;
+            font-style: italic;
+        }
+
+        /* === Placeholder (geen screenshot) === */
+        .project-card-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.06) 100%);
+            cursor: default;
+        }
+
+        .project-card-placeholder::after {
+            display: none;
+        }
+
+        .placeholder-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-light);
+            opacity: 0.5;
+        }
+
+        .placeholder-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .placeholder-sub {
+            font-size: 0.8rem;
+        }
+
+        /* === Lightbox === */
+        .lightbox-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .lightbox-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .lightbox-overlay img {
+            max-width: 90vw;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 0.5rem;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+
+        .lightbox-overlay.active img {
+            transform: scale(1);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            width: 44px;
+            height: 44px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .lightbox-close:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        /* === Legenda pills === */
+        .legend-pills {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .legend-pill {
+            display: inline-block;
+            padding: 0.3rem 0.85rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: white;
+        }
+
+        .legend-pill--ai { background: var(--cat-ai); }
+        .legend-pill--bi { background: var(--cat-bi); }
+        .legend-pill--web { background: var(--cat-web); }
+        .legend-pill--iot { background: var(--cat-iot); }
+
+        /* Hawkeye section */
+        .hawkeye-highlight {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);
+            color: white;
+            padding: 5rem 0;
+        }
+
+        .hawkeye-highlight h2 {
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .hawkeye-highlight .subtitle {
+            color: rgba(255,255,255,0.7);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .hawkeye-highlight .tag {
+            background: rgba(255,255,255,0.15);
+            color: white;
+        }
+
+        .hawkeye-highlight .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .hawkeye-highlight .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .hawkeye-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .hawkeye-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .hawkeye-stat {
+            background: rgba(255,255,255,0.08);
+            padding: 1rem 1.25rem;
+            border-radius: 0.75rem;
+        }
+
+        .hawkeye-stat .val {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .hawkeye-stat .lbl {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.6);
+        }
+
+        /* Studietraject banner */
+        .studietraject-banner {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .studietraject-banner p {
+            margin: 0;
+            color: var(--text-light);
+        }
+
+        @media (max-width: 768px) {
+            .project-list {
+                grid-template-columns: 1fr;
+            }
+            .project-card-rich {
+                flex-direction: column;
+                height: auto;
+            }
+            .project-card-thumb {
+                width: 100%;
+                height: 200px;
+            }
+            .hawkeye-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .studietraject-banner {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-dark" id="mainNav">
+        <div class="container">
+            <a href="index.html" class="navbar-brand">Stijn De Beuckeleer</a>
+            <button class="navbar-toggle" aria-label="Toggle navigation">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="navbar-nav">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="../over-mij/">Over mij</a></li>
+                <li><a href="../stage/">Stage</a></li>
+                <li><a href="../projecten/" class="active">Projecten</a></li>
+                <li><a href="../studietraject/">Studietraject</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container">
+            <h1>Projecten</h1>
+            <p>Van schoolopdrachten tot persoonlijke IoT-projecten - een selectie van wat ik gebouwd heb.</p>
+        </div>
+    </header>
+
+    <section class="section">
+        <div class="container">
+            <div class="legend-pills">
+                <span class="legend-pill legend-pill--ai">AI</span>
+                <span class="legend-pill legend-pill--bi">BI</span>
+                <span class="legend-pill legend-pill--web">Web</span>
+                <span class="legend-pill legend-pill--iot">IoT</span>
+            </div>
+            <h2 class="mb-3">Schoolprojecten</h2>
+            <div class="project-list">
+
+                <!-- ── AI Notebooks (20/20) ── -->
+                <div class="card project-card-rich" data-category="ai">
+                    <div class="project-card-body">
+                        <div class="project-card-header">
+                            <div>
+                                <span class="tag tag-primary">20/20</span>
+                                <span class="tag">2024-2025</span>
+                            </div>
+                            <a href="https://github.com/portfolio-stijn/ai-notebooks" target="_blank" rel="noopener" class="project-link" title="GitHub repo">
+                                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                            </a>
+                        </div>
+                        <h3>Artificial Intelligence</h3>
+                        <p class="project-context">AI - ML challenge (Campus Recruitment) + DL challenge (Dinosaur Classification)</p>
+                        <p class="project-desc">Twee challenges: dinosaurus classificatie met transfer learning (EfficientNetB0, 91.3% accuracy) en campus recruitment voorspelling met Random Forest en Ensemble modellen. Inclusief interactieve HTML presentatie.</p>
+                        <div class="project-meta">
+                            <div class="tags">
+                                <span class="tag"><i class="devicon-python-plain colored"></i> Python</span><span class="tag">Scikit-learn</span><span class="tag"><i class="devicon-tensorflow-original colored"></i> TensorFlow</span><span class="tag"><i class="devicon-jupyter-plain colored"></i> Jupyter</span>
+                            </div>
+                            <span class="project-type">Individueel</span>
+                        </div>
+                    </div>
+                    <div class="project-card-thumb">
+                        <img src="../assets/img/projects/ai-dino.png" alt="AI Dinosaur Classification resultaten">
+                    </div>
+                </div>
+
+                <!-- ── Qlik Sense Dashboard (20/20) ── -->
+                <div class="card project-card-rich" data-category="bi">
+                    <div class="project-card-body">
+                        <div class="project-card-header">
+                            <div>
+                                <span class="tag tag-primary">20/20</span>
+                                <span class="tag">2024-2025</span>
+                            </div>
+                            <div></div>
+                        </div>
+                        <h3>Data Visualisation - Qlik Sense</h3>
+                        <p class="project-context">DataVisualisatie - verkeersongevallen in Vlaanderen</p>
+                        <p class="project-desc">Een interactief Qlik Sense dashboard over verkeersongevallen in Vlaanderen. Zelf ontworpen dimensioneel datamodel (star schema) met ETL-scripting, master calendar en set analysis. Vijf pagina's: weggebruikers, tijdsgebonden analyse, omstandigheden, locatie en KPI-overzicht.</p>
+                        <div class="project-meta">
+                            <div class="tags">
+                                <span class="tag">Qlik Sense</span><span class="tag">ETL</span><span class="tag">Star Schema</span><span class="tag">Data Modelling</span>
+                            </div>
+                            <span class="project-type">Individueel</span>
+                        </div>
+                    </div>
+                    <div class="project-card-thumb project-card-placeholder">
+                        <div class="placeholder-content">
+                            <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg>
+                            <span class="placeholder-title">Qlik Sense</span>
+                            <span class="placeholder-sub">Interactief dashboard</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── CinemaBot (19/20) ── -->
+                <div class="card project-card-rich" data-category="ai">
+                    <div class="project-card-body">
+                        <div class="project-card-header">
+                            <div>
+                                <span class="tag tag-primary">19/20</span>
+                                <span class="tag">2025-2026</span>
+                            </div>
+                            <a href="https://github.com/portfolio-stijn/cinemabot" target="_blank" rel="noopener" class="project-link" title="GitHub repo">
+                                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                            </a>
+                        </div>
+                        <h3>CinemaBot</h3>
+                        <p class="project-context">AI.NET - transactionele chatbot voor Microsoft Teams</p>
+                        <p class="project-desc">Een chatbot waarmee je via Teams bioscooptickets kunt zoeken, boeken en annuleren in natuurlijke taal. Gebouwd met Semantic Kernel voor AI-orchestratie en Adaptive Cards voor visuele weergave van films en showtimes. Drie lagen: Bot Framework (Teams), Semantic Kernel backend en een eigen Cinema REST API met EF Core.</p>
+                        <div class="project-meta">
+                            <div class="tags">
+                                <span class="tag"><i class="devicon-csharp-plain colored"></i> C#</span><span class="tag">Semantic Kernel</span><span class="tag"><i class="devicon-azure-plain colored"></i> Azure OpenAI</span><span class="tag">Teams</span><span class="tag">REST API</span>
+                            </div>
+                            <span class="project-type">Individueel</span>
+                        </div>
+                    </div>
+                    <div class="project-card-thumb">
+                        <img src="../assets/img/projects/cinemabot.png" alt="CinemaBot screenshot">
+                    </div>
+                </div>
+
+                <!-- ── TripTracker (19/20) ── -->
+                <div class="card project-card-rich" data-category="ai">
+                    <div class="project-card-body">
+                        <div class="project-card-header">
+                            <div>
+                                <span class="tag tag-primary">19/20</span>
+                                <span class="tag">2025-2026</span>
+                            </div>
+                            <a href="https://github.com/portfolio-stijn/triptracker" target="_blank" rel="noopener" class="project-link" title="GitHub repo">
+                                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                            </a>
+                        </div>
+                        <h3>TripTracker</h3>
+                        <p class="project-context">AI.NET - cross-platform reis-app met .NET MAUI</p>
+                        <p class="project-desc">Een mobile app waarmee je reizen plant en bijhoudt met foto's, GPS-locaties en een interactieve kaartweergave. Stops worden automatisch gegeocodeerd en AI-beeldherkenning genereert beschrijvingen bij foto's. Eigen REST API backend met EF Core en AutoMapper.</p>
+                        <div class="project-meta">
+                            <div class="tags">
+                                <span class="tag"><i class="devicon-csharp-plain colored"></i> C#</span><span class="tag"><i class="devicon-dotnetcore-plain colored"></i> .NET MAUI</span><span class="tag">MVVM</span><span class="tag">MAUI Maps</span><span class="tag">REST API</span>
+                            </div>
+                            <span class="project-type">Individueel</span>
+                        </div>
+                    </div>
+                    <div class="project-card-thumb">
+                        <img src="../assets/img/projects/triptracker.png" alt="TripTracker screenshot">
+                    </div>
+                </div>
+
+                <!-- ── Vastgoedbeheerder (16/20) ── -->
+                <div class="card project-card-rich" data-category="web">
+                    <div class="project-card-body">
+                        <div class="project-card-header">
+                            <div>
+                                <span class="tag">16/20</span>
+                                <span class="tag">2024-2025</span>
+                            </div>
+                            <a href="https://github.com/portfolio-stijn/vastgoedbeheerder" target="_blank" rel="noopener" class="project-link" title="GitHub repo">
+                                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                            </a>
+                        </div>
+                        <h3>Vastgoedbeheerder</h3>
+                        <p class="project-context">Angular - full-stack vastgoedplatform</p>
+                        <p class="project-desc">Een webapplicatie voor vastgoedbeheer met een dashboard (Chart.js), CRUD voor panden en huurders, en een favorieten-systeem. Angular frontend met reactive forms en routing guards, gekoppeld aan een .NET Web API backend met JWT authenticatie via Auth0.</p>
+                        <div class="project-meta">
+                            <div class="tags">
+                                <span class="tag"><i class="devicon-angularjs-plain colored"></i> Angular</span><span class="tag"><i class="devicon-typescript-plain colored"></i> TypeScript</span><span class="tag">Chart.js</span><span class="tag"><i class="devicon-csharp-plain colored"></i> C# API</span><span class="tag">Auth0</span>
+                            </div>
+                            <span class="project-type">Individueel</span>
+                        </div>
+                    </div>
+                    <div class="project-card-thumb">
+                        <img src="../assets/img/projects/vastgoed.png" alt="Vastgoedbeheerder screenshot">
+                    </div>
+                </div>
+
+            </div>
+
+            <h2 class="mb-3" style="margin-top: 3rem;">Persoonlijke projecten</h2>
+            <div class="project-list">
+
+                <!-- ── Growatt Home Assistant ── -->
+                <div class="card project-card-rich" data-category="iot">
+                    <div class="project-card-body">
+                        <div class="project-card-header">
+                            <div>
+                                <span class="tag">Persoonlijk</span>
+                            </div>
+                            <a href="https://github.com/portfolio-stijn/growatt-home-assistant" target="_blank" rel="noopener" class="project-link" title="GitHub repo">
+                                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                            </a>
+                        </div>
+                        <h3>Growatt zonnepaneel-automatisering</h3>
+                        <p class="project-context">Eigen project - IoT + Home Assistant + Python</p>
+                        <p class="project-desc">Growatt omvormers hebben een firmware-bug waardoor ze 's morgens niet automatisch opstarten. Dit Python-script draait 24/7 op een Raspberry Pi, controleert periodiek de status via de Growatt API en herstart vastgelopen omvormers automatisch. Met retry-logica en rate limit bescherming.</p>
+                        <div class="project-meta">
+                            <div class="tags">
+                                <span class="tag"><i class="devicon-python-plain colored"></i> Python</span><span class="tag">Home Assistant</span><span class="tag">IoT</span><span class="tag">API</span>
+                            </div>
+                            <span class="project-type">Persoonlijk project</span>
+                        </div>
+                    </div>
+                    <div class="project-card-thumb">
+                        <img src="../assets/img/projects/growatt-ha.png" alt="Growatt Home Assistant dashboard">
+                    </div>
+                </div>
+
+                <!-- ── Marstek Battery Rotation ── -->
+                <div class="card project-card-rich" data-category="iot">
+                    <div class="project-card-body">
+                        <div class="project-card-header">
+                            <div>
+                                <span class="tag">Persoonlijk</span>
+                            </div>
+                            <a href="https://github.com/portfolio-stijn/marstek-battery-rotation" target="_blank" rel="noopener" class="project-link" title="GitHub repo">
+                                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                            </a>
+                        </div>
+                        <h3>Marstek batterijrotatie</h3>
+                        <p class="project-context">Eigen project - Home Assistant integratie + MQTT</p>
+                        <p class="project-desc">Intelligent rotatiesysteem voor 3 Marstek thuisbatterijen. Op basis van real-time P1 meterdata wordt automatisch de leegste batterij geladen bij zonoverschot en de volste ontladen bij netverbruik. Inclusief eigen MQTT poller, Home Assistant dashboard, nachtmodus en safety features. Volledig configureerbaar via UI.</p>
+                        <div class="project-meta">
+                            <div class="tags">
+                                <span class="tag"><i class="devicon-python-plain colored"></i> Python</span><span class="tag">MQTT</span><span class="tag">Home Assistant</span><span class="tag">IoT</span>
+                            </div>
+                            <span class="project-type">Persoonlijk project</span>
+                        </div>
+                    </div>
+                    <div class="project-card-thumb">
+                        <img src="../assets/img/projects/marstek.png" alt="Marstek batterijrotatie dashboard">
+                    </div>
+                </div>
+
+                <!-- ── Growatt Control App ── -->
+                <div class="card project-card-rich" data-category="iot">
+                    <div class="project-card-body">
+                        <div class="project-card-header">
+                            <div>
+                                <span class="tag">Persoonlijk</span>
+                            </div>
+                            <a href="https://github.com/portfolio-stijn/growatt-control-app" target="_blank" rel="noopener" class="project-link" title="GitHub repo">
+                                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                            </a>
+                        </div>
+                        <h3>Growatt Control App</h3>
+                        <p class="project-context">Eigen project - Flutter mobile app voor energiebeheer</p>
+                        <p class="project-desc">Een Flutter app voor het monitoren en aansturen van Growatt omvormers. Live status per apparaat (producerend, wachtend, offline), totaaloverzicht van alle omvormers en remote aan/uit-bediening. Beschikbaar als downloadbare APK.</p>
+                        <div class="project-meta">
+                            <div class="tags">
+                                <span class="tag"><i class="devicon-flutter-plain colored"></i> Flutter</span><span class="tag"><i class="devicon-dart-plain colored"></i> Dart</span><span class="tag">API</span><span class="tag">Mobile</span>
+                            </div>
+                            <span class="project-type">Persoonlijk project</span>
+                        </div>
+                    </div>
+                    <div class="project-card-thumb">
+                        <img src="../assets/img/projects/growatt-app.png" alt="Growatt Control App screenshot">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== HAWKEYE ==================== -->
+    <section class="hawkeye-highlight">
+        <div class="container">
+            <div class="hawkeye-grid">
+                <div>
+                    <p style="color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.08em;font-size:0.85rem;margin-bottom:0.5rem;">Stage 2026</p>
+                    <h2>Project Hawkeye</h2>
+                    <p class="subtitle">360-graden medewerkeroverzicht door data-integratie uit HR, Lonen, Sales, Operations en Projectmanagement.</p>
+                    <p style="color:rgba(255,255,255,0.8);margin-bottom:1.5rem;">
+                        Bij Algorhythm (IT-consultancy, Turnhout) bouwde ik een unified data platform
+                        met Microsoft Fabric en maakte ik de data inzichtelijk via Power BI dashboards.
+                    </p>
+                    <div class="tags mb-3">
+                        <span class="tag"><i class="devicon-azure-plain colored"></i> Azure</span>
+                        <span class="tag">Microsoft Fabric</span>
+                        <span class="tag">Power BI</span>
+                        <span class="tag">ETL/ELT</span>
+                        <span class="tag">Data Modelling</span>
+                    </div>
+                    <a href="../stage/" class="btn btn-secondary">Meer over mijn stage</a>
+                </div>
+                <div>
+                    <div class="hawkeye-stats">
+                        <div class="hawkeye-stat">
+                            <span class="val">3</span>
+                            <span class="lbl">Databronnen</span>
+                        </div>
+                        <div class="hawkeye-stat">
+                            <span class="val">3</span>
+                            <span class="lbl">Rapporten</span>
+                        </div>
+                        <div class="hawkeye-stat">
+                            <span class="val">4</span>
+                            <span class="lbl">Maanden</span>
+                        </div>
+                        <div class="hawkeye-stat">
+                            <span class="val">BI/AI</span>
+                            <span class="lbl">Domein</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== STUDIETRAJECT LINK ==================== -->
+    <section class="section">
+        <div class="container">
+            <div class="studietraject-banner">
+                <div>
+                    <strong>25 vakken over 4 jaar</strong>
+                    <p>Bekijk mijn volledige studietraject als interactieve scrollytelling.</p>
+                </div>
+                <a href="../studietraject/" class="btn btn-secondary">Bekijk studietraject</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="social-links">
+                <a href="https://github.com/portfolio-stijn" target="_blank" rel="noopener" aria-label="GitHub">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                </a>
+                <a href="mailto:stijn@debeuckeleer.eu" aria-label="Email">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M0 3v18h24v-18h-24zm21.518 2l-9.518 7.713-9.518-7.713h19.036zm-19.518 14v-11.817l10 8.104 10-8.104v11.817h-20z"/></svg>
+                </a>
+                <div class="signal-wrap">
+                    <a href="#" aria-label="Signal" onclick="return false;">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l4.93-1.38A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18a8 8 0 0 1-4.07-1.11l-.29-.17-3.01.84.84-3.01-.17-.29A8 8 0 1 1 12 20z"/></svg>
+                    </a>
+                    <div class="signal-qr-popup">
+                        <img src="../assets/img/signal-qr.png" alt="Signal QR code">
+                    </div>
+                </div>
+            </div>
+            <p class="footer-text">&copy; 2026 Stijn De Beuckeleer. man in the loop</p>
+        </div>
+    </footer>
+
+    <!-- Lightbox -->
+    <div class="lightbox-overlay" id="lightbox">
+        <button class="lightbox-close" aria-label="Sluiten">&times;</button>
+        <img src="" alt="">
+    </div>
+
+    <script>
+    // Navbar scroll effect
+    var nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', function() {
+        nav.classList.toggle('scrolled', window.scrollY > 100);
+    });
+    // Mobile menu
+    document.querySelector('.navbar-toggle').addEventListener('click', function() {
+        document.querySelector('.navbar-nav').classList.toggle('active');
+    });
+
+    // Lightbox
+    (function() {
+        var overlay = document.getElementById('lightbox');
+        var lbImg = overlay.querySelector('img');
+        var thumbs = document.querySelectorAll('.project-card-thumb');
+
+        thumbs.forEach(function(thumb) {
+            thumb.addEventListener('click', function() {
+                var src = thumb.querySelector('img').src;
+                lbImg.src = src;
+                lbImg.alt = thumb.querySelector('img').alt;
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        function closeLightbox() {
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        overlay.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
+        overlay.addEventListener('click', function(e) {
+            if (e.target === overlay) closeLightbox();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeLightbox();
+        });
+    })();
+    </script>
+</body>
+</html>
