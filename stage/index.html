@@ -11,6 +11,19 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        @media (max-width: 768px) {
+            .stage-grid-2col {
+                grid-template-columns: 1fr !important;
+            }
+            .stage-grid-4col {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+            .stage-grid-5col {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+        }
+    </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/devicon.min.css">
 </head>
 <body>
@@ -44,7 +57,7 @@
     <!-- Company Info -->
     <section class="section">
         <div class="container">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;">
+            <div class="stage-grid-2col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;">
                 <div>
                     <h2 class="mb-3">Het bedrijf</h2>
                     <h3>Algorhythm</h3>
@@ -128,7 +141,7 @@
                 </p>
 
                 <!-- Stats -->
-                <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; margin-top: 1rem;">
+                <div class="stage-grid-5col" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; margin-top: 1rem;">
                     <div style="background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.25); border-radius: 0.75rem; padding: 1.25rem; text-align: center;">
                         <span style="font-size: 2rem; font-weight: 700; display: block; color: var(--primary-color);">3</span>
                         <span style="font-size: 0.85rem; color: var(--text-light);">Bronsystemen</span>
@@ -168,7 +181,7 @@
 
             <!-- HR -->
             <h3 class="mb-3" style="font-size: 1.1rem; color: var(--text-light);">HR <span style="font-style: italic; font-weight: 400; font-size: 0.85rem;">- vertrouwelijke bedrijfsdata</span></h3>
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem;">
+            <div class="stage-grid-4col" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem;">
                 <div class="dashboard-thumb" style="cursor: pointer; border-radius: 0.75rem; overflow: hidden; border: 1px solid var(--border-color);">
                     <img src="../assets/img/stage/hr-overzicht.png" alt="HR Overzicht" style="width: 100%; display: block;">
                     <div style="padding: 0.4rem 0.6rem; background: var(--bg-light); font-size: 0.75rem; color: var(--text-light);">Overzicht</div>
@@ -190,7 +203,7 @@
 
             <!-- Operations -->
             <h3 class="mb-3" style="font-size: 1.1rem; color: var(--text-light);">Operations <span style="font-style: italic; font-weight: 400; font-size: 0.85rem;">- vertrouwelijke bedrijfsdata</span></h3>
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem;">
+            <div class="stage-grid-4col" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem;">
                 <div class="dashboard-thumb" style="cursor: pointer; border-radius: 0.75rem; overflow: hidden; border: 1px solid var(--border-color);">
                     <img src="../assets/img/stage/ops-overzicht.png" alt="Operations Overzicht" style="width: 100%; display: block;">
                     <div style="padding: 0.4rem 0.6rem; background: var(--bg-light); font-size: 0.75rem; color: var(--text-light);">Overzicht</div>
@@ -208,7 +221,7 @@
                     <div style="padding: 0.4rem 0.6rem; background: var(--bg-light); font-size: 0.75rem; color: var(--text-light);">Consultant detail</div>
                 </div>
             </div>
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem;">
+            <div class="stage-grid-4col" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem;">
                 <div class="dashboard-thumb" style="cursor: pointer; border-radius: 0.75rem; overflow: hidden; border: 1px solid var(--border-color);">
                     <img src="../assets/img/stage/ops-klant-detail.png" alt="Operations Klant detail" style="width: 100%; display: block;">
                     <div style="padding: 0.4rem 0.6rem; background: var(--bg-light); font-size: 0.75rem; color: var(--text-light);">Klant detail</div>
@@ -221,7 +234,7 @@
 
             <!-- Fleet -->
             <h3 class="mb-3" style="font-size: 1.1rem; color: var(--text-light);">Fleet <span style="font-style: italic; font-weight: 400; font-size: 0.85rem;">- vertrouwelijke bedrijfsdata</span></h3>
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;">
+            <div class="stage-grid-4col" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;">
                 <div class="dashboard-thumb" style="cursor: pointer; border-radius: 0.75rem; overflow: hidden; border: 1px solid var(--border-color);">
                     <img src="../assets/img/stage/fleet-tabel.png" alt="Fleet Overzicht" style="width: 100%; display: block;">
                     <div style="padding: 0.4rem 0.6rem; background: var(--bg-light); font-size: 0.75rem; color: var(--text-light);">Overzicht</div>
@@ -345,7 +358,7 @@
     <section class="section section-alt">
         <div class="container">
             <h2 class="mb-4">Technologie stack</h2>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+            <div class="stage-grid-2col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
                 <div>
                     <h3 class="mb-3" style="font-size: 1.1rem; color: var(--text-light);">Platform</h3>
                     <div class="tags" style="gap: 0.6rem;">
