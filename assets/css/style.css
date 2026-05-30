@@ -593,6 +593,11 @@ a:hover {
     font-size: 0.875rem;
 }
 
+.footer-text .ai-disclosure {
+    border-bottom: 1px dotted #64748b;
+    cursor: help;
+}
+
 /* Signal QR popup */
 .signal-wrap {
     position: relative;
